@@ -12,21 +12,21 @@ public class Coach {
 
 	@Id
 	@GeneratedValue
-	private Long coachid;
+	private Integer coachid;
 
-	@Column(nullable = false) private String coachname;
-	@Column(nullable = false) private String nickname;
+	@Column(nullable = true) private String coachname;
+	@Column(nullable = true) private String nickname;
 	@Column(nullable = false) private String idcard;
-	@Column(nullable = false) private String registerphone;
+	@Column(nullable = true) private String registerphone;
 	@Column(nullable = false) private String password;
-	@Column(nullable = false) private String realname;
-	@Column(nullable = false) private String sex;
-	@Column(nullable = false) private String area;
-	@Column(nullable = false) private String mail;
-	@Column(nullable = false) private String qq;
-	@Column(nullable = false) private String phone;
-	@Column(nullable = false) private String realage;
-	@Column(nullable = false) private Integer age;
+	@Column(nullable = true) private String realname;
+	@Column(nullable = true) private String sex;
+	@Column(nullable = true) private String area;
+	@Column(nullable = true) private String mail;
+	@Column(nullable = true) private String qq;
+	@Column(nullable = true) private String phone;
+	@Column(nullable = true) private String realage;
+	@Column(nullable = true) private Integer age;
 	@Column(nullable = false) private Integer carage;
 	@Column(nullable = false) private String cartype;
 	@Column(nullable = false) private String school;
@@ -35,21 +35,21 @@ public class Coach {
 	@Column(nullable = false) private Integer exam2cost;
 	@Column(nullable = false) private Integer exam3cost;
 	@Column(nullable = false) private Integer totalcost;
-	@Column(nullable = false) private Integer introduction; //personal introduction, optional
-	@Column(nullable = false) private String picture;  //picture URL
+	@Column(nullable = true) private String introduction; //personal introduction, optional
+	@Column(nullable = true) private String picture;  //picture URL
 	@Column(nullable = false) private String idcardpicture;
 	@Column(nullable = false) private String coachpicture;
 	@Column(nullable = false) private Boolean verify; //verified or not by admin
-	@Column(nullable = false) private Long money;   //students evaluation
-	@Column(nullable = false) private String bankaccount;
-	@Column(nullable = false) private String dummy1;
-	@Column(nullable = false) private String dummy2;
+	@Column(nullable = true) private Integer money;   //students evaluation
+	@Column(nullable = true) private String bankaccount;
+	@Column(nullable = true) private String dummy1;
+	@Column(nullable = true) private String dummy2;
 
-	public Long getCoachid() {
+	public Integer getCoachid() {
 		return coachid;
 	}
 
-	public void setCoachid(Long coachid) {
+	public void setCoachid(Integer coachid) {
 		this.coachid = coachid;
 	}
 
@@ -221,11 +221,11 @@ public class Coach {
 		this.totalcost = totalcost;
 	}
 
-	public Integer getIntroduction() {
+	public String getIntroduction() {
 		return introduction;
 	}
 
-	public void setIntroduction(Integer introduction) {
+	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
 
@@ -261,11 +261,11 @@ public class Coach {
 		this.verify = verify;
 	}
 
-	public Long getMoney() {
+	public Integer getMoney() {
 		return money;
 	}
 
-	public void setMoney(Long money) {
+	public void setMoney(Integer money) {
 		this.money = money;
 	}
 

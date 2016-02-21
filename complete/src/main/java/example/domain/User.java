@@ -12,7 +12,7 @@ public class User {
 
 	@Id
 	@GeneratedValue
-	private Long userid;
+	private Integer userid;
 
 	@Column(nullable = false) private String username;
 	@Column(nullable = true) private String nickname;
@@ -29,18 +29,39 @@ public class User {
 	@Column(nullable = true) private Integer age;
 	@Column(nullable = false) private Boolean verify;
 	@Column(nullable = true) private String picture;
-	@Column(nullable = true) private Long money;
+	@Column(nullable = true) private Integer money;
 	@Column(nullable = true) private String bankaccount;
 	@Column(nullable = true) private String sharedtime;
 	@Column(nullable = true) private String lastposition;
 	@Column(nullable = true) private String dummy1;
 	@Column(nullable = true) private String dummy2;
 
-	public Long getUserid() {
+
+	public void updateAllowedAttribute(User user){
+		if (null != user.getAge()){ this.setAge(user.getAge());	}
+		if (null != user.getArea()){ this.setArea(user.getArea()); }
+		if (null != user.getBankaccount()){ this.setBankaccount(user.getBankaccount()); }
+		if (null != user.getCompany()){ this.setCompany(user.getCompany()); }
+		if (null != user.getIdcard()){ this.setIdcard(user.getIdcard()); }
+		if (null != user.getLastposition()){ this.setLastposition(user.getLastposition()); }
+		if (null != user.getMail()){ this.setMail(user.getMail()); }
+		if (null != user.getMoney()){ this.setMoney(user.getMoney()); }
+		if (null != user.getNickname()){ this.setNickname(user.getNickname()); }
+		if (null != user.getPassword()){ this.setPassword(user.getPassword()); }
+		if (null != user.getPhone()){ this.setPhone(user.getPhone()); }
+		if (null != user.getPicture()){ this.setPicture(user.getPicture()); }
+		if (null != user.getQq()){ this.setQq(user.getQq()); }
+		if (null != user.getRealname()){ this.setRealname(user.getRealname()); }
+		if (null != user.getSex()){ this.setSex(user.getSex()); }
+		if (null != user.getSharedtime()){ this.setSharedtime(user.getSharedtime()); }
+		if (null != user.getUsername()){ this.setUsername(user.getUsername()); }
+	}
+
+	public Integer getUserid() {
 		return userid;
 	}
 
-	public void setUserid(Long userid) {
+	public void setUserid(Integer userid) {
 		this.userid = userid;
 	}
 
@@ -164,11 +185,11 @@ public class User {
 		this.picture = picture;
 	}
 
-	public Long getMoney() {
+	public Integer getMoney() {
 		return money;
 	}
 
-	public void setMoney(Long money) {
+	public void setMoney(Integer money) {
 		this.money = money;
 	}
 

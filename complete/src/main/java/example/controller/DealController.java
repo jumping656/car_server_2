@@ -1,6 +1,7 @@
 package example.controller;
 
-import example.repository.PersonRepository;
+import example.domain.Deal;
+import example.repository.DealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,18 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RestController
-public class PersonController {
+public class DealController {
 
 	@Autowired
-	private PersonRepository personRepository;
+	private DealRepository dealRepository;
 
-	@RequestMapping("/user")
+	@RequestMapping("/deal")
 	@ResponseBody
-	public String test(@RequestBody User user) {
-		//User user = new User();
-		//user.setFirstName("First");
-		//user.setLastName("Test");
-		personRepository.save(user);
-		return "hello, insert user into DB.";
+	public String test(@RequestBody Deal deal) {
+		//User person = new User();
+		dealRepository.save(deal);
+		return "hello, insert deal into DB.";
 	}
 }

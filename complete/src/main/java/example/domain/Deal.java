@@ -7,41 +7,41 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "order")
-public class Order {
+@Table(name = "deal")
+public class Deal {
 
 	@Id
 	@GeneratedValue
-	private Long orderid;
+	private Integer dealid;
 
-	@Column(nullable = false) private Long userid;
-	@Column(nullable = false) private Long coachid;
-	@Column(nullable = false) private String state;
-	@Column(nullable = false) private Integer price;
-	@Column(nullable = false) private String dummy1;
-	@Column(nullable = false) private String dummy2;
+	@Column(nullable = false) private Integer userid = 1;
+	@Column(nullable = false) private Integer coachid = 1;
+	@Column(nullable = false) private String state = "ongoing";
+	@Column(nullable = false) private Integer price = 4000;
+	@Column(nullable = true) private String dummy1;
+	@Column(nullable = true) private String dummy2;
 
-	public Long getOrderid() {
-		return orderid;
+	public Integer getDealid() {
+		return dealid;
 	}
 
-	public void setOrderid(Long orderid) {
-		this.orderid = orderid;
+	public void setDealid(Integer dealid) {
+		this.dealid = dealid;
 	}
 
-	public Long getUserid() {
+	public Integer getUserid() {
 		return userid;
 	}
 
-	public void setUserid(Long userid) {
+	public void setUserid(Integer userid) {
 		this.userid = userid;
 	}
 
-	public Long getCoachid() {
+	public Integer getCoachid() {
 		return coachid;
 	}
 
-	public void setCoachid(Long coachid) {
+	public void setCoachid(Integer coachid) {
 		this.coachid = coachid;
 	}
 
