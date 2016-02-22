@@ -17,7 +17,7 @@ public class Coach {
 	@Column(nullable = true) private String coachname;
 	@Column(nullable = true) private String nickname;
 	@Column(nullable = false) private String idcard;
-	@Column(nullable = true) private String registerphone;
+	@Column(nullable = false) private String registerphone;
 	@Column(nullable = false) private String password;
 	@Column(nullable = true) private String realname;
 	@Column(nullable = true) private String sex;
@@ -42,8 +42,38 @@ public class Coach {
 	@Column(nullable = false) private Boolean verify; //verified or not by admin
 	@Column(nullable = true) private Integer money;   //students evaluation
 	@Column(nullable = true) private String bankaccount;
+	@Column(nullable = true) private Integer sharedtime;
 	@Column(nullable = true) private String dummy1;
 	@Column(nullable = true) private String dummy2;
+
+	public void updateAllowedAttribute(Coach coach){
+		if (null != coach.getAge()){ this.setAge(coach.getAge());	}
+		if (null != coach.getArea()){ this.setArea(coach.getArea()); }
+		if (null != coach.getBankaccount()){ this.setBankaccount(coach.getBankaccount()); }
+		if (null != coach.getCarage()){ this.setCarage(coach.getCarage()); }
+		if (null != coach.getIdcard()){ this.setIdcard(coach.getIdcard()); }
+		if (null != coach.getCartype()){ this.setCartype(coach.getCartype()); }
+		if (null != coach.getMail()){ this.setMail(coach.getMail()); }
+		if (null != coach.getMoney()){ this.setMoney(coach.getMoney()); }
+		if (null != coach.getNickname()){ this.setNickname(coach.getNickname()); }
+		if (null != coach.getPassword()){ this.setPassword(coach.getPassword()); }
+		if (null != coach.getPhone()){ this.setPhone(coach.getPhone()); }
+		if (null != coach.getPicture()){ this.setPicture(coach.getPicture()); }
+		if (null != coach.getQq()){ this.setQq(coach.getQq()); }
+		if (null != coach.getRealname()){ this.setRealname(coach.getRealname()); }
+		if (null != coach.getSex()){ this.setSex(coach.getSex()); }
+		if (null != coach.getSharedtime()){ this.setSharedtime(coach.getSharedtime()); }
+		if (null != coach.getCoachname()){ this.setCoachname(coach.getCoachname()); }
+		if (null != coach.getSchool()){ this.setSchool(coach.getSchool()); }
+		if (null != coach.getSchooladdress()){ this.setSchooladdress(coach.getSchooladdress()); }
+		if (null != coach.getEvaluation()){ this.setEvaluation(coach.getEvaluation()); }
+		if (null != coach.getExam2cost()){ this.setExam2cost(coach.getExam2cost()); }
+		if (null != coach.getExam3cost()){ this.setExam3cost(coach.getExam3cost()); }
+		if (null != coach.getTotalcost()){ this.setTotalcost(coach.getTotalcost()); }
+		if (null != coach.getIntroduction()){ this.setIntroduction(coach.getIntroduction()); }
+		if (null != coach.getIdcardpicture()){ this.setIdcardpicture(coach.getIdcardpicture()); }
+		if (null != coach.getCoachpicture()){ this.setCoachpicture(coach.getCoachpicture()); }
+	}
 
 	public Integer getCoachid() {
 		return coachid;
@@ -275,6 +305,14 @@ public class Coach {
 
 	public void setBankaccount(String bankaccount) {
 		this.bankaccount = bankaccount;
+	}
+
+	public Integer getSharedtime() {
+		return sharedtime;
+	}
+
+	public void setSharedtime(Integer sharedtime) {
+		this.sharedtime = sharedtime;
 	}
 
 	public String getDummy1() {

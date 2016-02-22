@@ -38,7 +38,7 @@ public class UserController {
 					HttpStatus.NOT_FOUND);
 		}
 
-		User getUser = userRepository.findByGegisterphone(user.getRegisterphone());
+		User getUser = userRepository.findByRegisterphone(user.getRegisterphone());
 		if (null != getUser){
 			logger.info("register phone already exists");
 			return new ResponseEntity<String>("register phone already exists",
@@ -119,7 +119,7 @@ public class UserController {
 		}
 
 		try {
-			userRepository.save(getUser);
+			userRepository.delete(getUser);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("delete user failed." + e.toString());
@@ -145,7 +145,7 @@ public class UserController {
 		}
 		logger.info("Start getUser. Registerphone= " + user.getRegisterphone());
 
-		User getUser = userRepository.findByGegisterphone(user.getRegisterphone());
+		User getUser = userRepository.findByRegisterphone(user.getRegisterphone());
 		if (null == getUser){
 			return null;
 		}

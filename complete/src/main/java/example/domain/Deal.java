@@ -14,12 +14,16 @@ public class Deal {
 	@GeneratedValue
 	private Integer dealid;
 
-	@Column(nullable = false) private Integer userid = 1;
-	@Column(nullable = false) private Integer coachid = 1;
-	@Column(nullable = false) private String state = "ongoing";
-	@Column(nullable = false) private Integer price = 4000;
+	@Column(nullable = false) private Integer userid;
+	@Column(nullable = false) private Integer coachid;
+	@Column(nullable = false) private DEAL_STATE state;
+	@Column(nullable = false) private Integer price;
 	@Column(nullable = true) private String dummy1;
 	@Column(nullable = true) private String dummy2;
+
+	public enum  DEAL_STATE {
+		CANCELLED , ONGOING , DONE, FINISHED ;
+	}
 
 	public Integer getDealid() {
 		return dealid;
@@ -45,11 +49,11 @@ public class Deal {
 		this.coachid = coachid;
 	}
 
-	public String getState() {
+	public DEAL_STATE getState() {
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(DEAL_STATE state) {
 		this.state = state;
 	}
 

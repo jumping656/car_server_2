@@ -31,7 +31,7 @@ public class User {
 	@Column(nullable = true) private String picture;
 	@Column(nullable = true) private Integer money;
 	@Column(nullable = true) private String bankaccount;
-	@Column(nullable = true) private String sharedtime;
+	@Column(nullable = true) private Integer sharedtime;
 	@Column(nullable = true) private String lastposition;
 	@Column(nullable = true) private String dummy1;
 	@Column(nullable = true) private String dummy2;
@@ -201,11 +201,11 @@ public class User {
 		this.bankaccount = bankaccount;
 	}
 
-	public String getSharedtime() {
+	public Integer getSharedtime() {
 		return sharedtime;
 	}
 
-	public void setSharedtime(String sharedtime) {
+	public void setSharedtime(Integer sharedtime) {
 		this.sharedtime = sharedtime;
 	}
 
