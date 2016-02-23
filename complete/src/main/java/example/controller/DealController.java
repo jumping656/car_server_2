@@ -1,6 +1,5 @@
 package example.controller;
 
-import example.domain.Coach;
 import example.domain.Deal;
 import example.repository.DealRepository;
 import org.slf4j.Logger;
@@ -37,17 +36,17 @@ public class DealController {
 
 		Deal getDeal = dealRepository.findByUserid(deal.getUserid());
 		if (null != getDeal){
-			logger.info("userid exists");
+			logger.info("dealid exists");
 			return new ResponseEntity<String>("userid exists",
 					HttpStatus.CONFLICT);
 		}
 
 		try {
 			deal.setState(Deal.DEAL_STATE.ONGOING);
-			coachRepository.save(coach);
+			dealRepository.save(deal);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("save coach failed." + e.toString());
+			System.out.println("create deal failed." + e.toString());
 		} finally {
 //			try {
 //				conn.close();
@@ -56,40 +55,42 @@ public class DealController {
 //			}
 		}
 
-		logger.info("create coach Successfully!");
+		logger.info("create deal Successfully!");
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 
-	//update coach
-	@RequestMapping(value = CoachRestURIConstants.UPDATE_COACH, method = RequestMethod.PUT)
+	//update deal
+	@RequestMapping(value = DealRestURIConstants.UPDATE_DEAL, method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<String> updateCoach(@RequestBody Coach coach) {
-		logger.info("Start updateCoach.");
+	public ResponseEntity<String> updateDeal(@RequestBody Deal deal) {
+		logger.info("Start updateDeal.");
 
-		if (coach.getRegisterphone().isEmpty() || null == coach.getRegisterphone()){
-			logger.info("register phone is empty");
-			return new ResponseEntity<String>("register phone is empty",
+		if (deal.getDealid() <= 0 || null == deal.getDealid()){
+			logger.info("dealid is empty");
+			return new ResponseEntity<String>("dealid is empty",
 					HttpStatus.NOT_FOUND);
 		}
 
-		Coach getCoach = coachRepository.findByRegisterphone(coach.getRegisterphone());
-		if (null == getCoach){
-			logger.info("coach not exists");
-			return new ResponseEntity<String>("coach not exists",
+		Deal getDeal = dealRepository.findByDealid(deal.getDealid());
+		if (null == getDeal){
+			logger.info("deal not exists");
+			return new ResponseEntity<String>("deal not exists",
+					HttpStatus.NOT_FOUND);
+		}
+
+		if (getDeal.getUserid()  != deal.getUserid() ||
+			getDeal.getCoachid() != deal.getCoachid()) {
+			logger.info("userid or coachdi can not change");
+			return new ResponseEntity<String>("userid or coachdi can not change",
 					HttpStatus.NOT_FOUND);
 		}
 
 		try {
-			getCoach.updateAllowedAttribute(coach);
+			getDeal.updateAllowedAttribute(deal);
 
-			//first time update to set
-			if (!getCoach.getVerify())
-			{
-				getCoach.setVerify(true);
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("update coach failed." + e.toString());
+			System.out.println("update deal failed." + e.toString());
 		} finally {
 //			try {
 //				conn.close();
@@ -98,34 +99,34 @@ public class DealController {
 //			}
 		}
 
-		logger.info("update coach Successfully!");
+		logger.info("update deal Successfully!");
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 
-	//delete coach
-	@RequestMapping(value = CoachRestURIConstants.DELETE_COACH, method = RequestMethod.DELETE)
+	//delete deal
+	@RequestMapping(value = DealRestURIConstants.DELETE_DEAL, method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseEntity<String> deleteUser(@RequestBody Coach coach) {
-		logger.info("Start deleteCoach.");
+	public ResponseEntity<String> deleteDeal(@RequestBody Deal deal) {
+		logger.info("Start deleteDeal.");
 
-		if (null == coach.getCoachid() || coach.getCoachid() <= 0){
-			logger.info("coachid invalid");
-			return new ResponseEntity<String>("coachid invalid",
+		if (null == deal.getDealid() || deal.getDealid() <= 0){
+			logger.info("dealid invalid");
+			return new ResponseEntity<String>("dealdi invalid",
 					HttpStatus.NOT_FOUND);
 		}
 
-		Coach getCoach = coachRepository.findByCoachid(coach.getCoachid());
-		if (null == getCoach){
-			logger.info("coach not exists");
-			return new ResponseEntity<String>("coach not exists",
+		Deal getDeal = dealRepository.findByDealid(deal.getDealid());
+		if (null == getDeal){
+			logger.info("deal not exists");
+			return new ResponseEntity<String>("deal not exists",
 					HttpStatus.NOT_FOUND);
 		}
 
 		try {
-			coachRepository.delete(getCoach);
+			dealRepository.delete(getDeal);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("delete coach failed." + e.toString());
+			System.out.println("delete deal failed." + e.toString());
 		} finally {
 //			try {
 //				conn.close();
@@ -134,41 +135,41 @@ public class DealController {
 //			}
 		}
 
-		logger.info("delete coach Successfully!");
+		logger.info("delete deal Successfully!");
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 
-	//get coach by registerphone
-	@RequestMapping(value = CoachRestURIConstants.GET_COACH, method = RequestMethod.GET)
+	//get deal by dealid
+	@RequestMapping(value = DealRestURIConstants.GET_DEAL, method = RequestMethod.GET)
 	@ResponseBody
-	public Coach getCoach(@RequestBody Coach coach) {
-		if (coach.getRegisterphone().isEmpty() || null == coach.getRegisterphone()){
-			logger.info("register phone is empty");
+	public Deal getDeal(@RequestBody Deal deal) {
+		if (deal.getDealid() <= 0 || null == deal.getDealid()){
+			logger.info("dealid is empty");
 			return null;
 		}
-		logger.info("Start getCoach. Registerphone= " + coach.getRegisterphone());
+		logger.info("Start getDeal.dealid= " + deal.getDealid());
 
-		Coach getCoach = coachRepository.findByRegisterphone(coach.getRegisterphone());
-		if (null == getCoach){
+		Deal getDeal = dealRepository.findByDealid(deal.getDealid());
+		if (null == getDeal){
 			return null;
 		}
 
-		logger.info("get coach Successfully!");
-		return getCoach;
+		logger.info("get deal Successfully!");
+		return getDeal;
 	}
 
-	//get all coachs
-	@RequestMapping(value = CoachRestURIConstants.GET_ALL_COACH, method = RequestMethod.GET)
+	//get all deals
+	@RequestMapping(value = DealRestURIConstants.GET_ALL_DEAL, method = RequestMethod.GET)
 	@ResponseBody
-	public List<Coach> getAllCoachs(@RequestBody Coach coach) {
-		logger.info("Start getCoachs.");
+	public List<Deal> getAllDeals(@RequestBody Deal deal) {
+		logger.info("Start getDeals.");
 
-		List<Coach> getCoachList = coachRepository.findAll();
-		if (null == getCoachList){
+		List<Deal> getDealList = dealRepository.findAll();
+		if (null == getDealList){
 			return null;
 		}
 
-		logger.info("get all coachs Successfully!");
-		return getCoachList;
+		logger.info("get all deals Successfully!");
+		return getDealList;
 	}
 }
