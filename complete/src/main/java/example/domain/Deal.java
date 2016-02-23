@@ -25,11 +25,6 @@ public class Deal {
 		CANCELLED , ONGOING , DONE, FINISHED ;
 	}
 
-	public void updateAllowedAttribute(Deal deal){
-		if (null != deal.getState()){ this.setState(deal.getState());	}
-		if (null != deal.getPrice()){ this.setPrice(deal.getPrice()); }
-	}
-
 	public Integer getDealid() {
 		return dealid;
 	}
