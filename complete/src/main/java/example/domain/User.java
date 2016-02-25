@@ -49,7 +49,7 @@ public class User {
 		if (null != user.getNickname()){ this.setNickname(user.getNickname()); }
 		if (null != user.getPassword()){ this.setPassword(user.getPassword()); }
 		if (null != user.getPhone()){ this.setPhone(user.getPhone()); }
-		if (null != user.getPicture()){ this.setPicture(user.getPicture()); }
+		//if (null != user.getPicture()){ this.setPicture(user.getPicture()); }
 		if (null != user.getQq()){ this.setQq(user.getQq()); }
 		if (null != user.getRealname()){ this.setRealname(user.getRealname()); }
 		if (null != user.getSex()){ this.setSex(user.getSex()); }

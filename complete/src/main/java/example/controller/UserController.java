@@ -84,6 +84,7 @@ public class UserController {
 			{
 				getUser.setVerify(true);
 			}
+			userRepository.save(getUser);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("update user failed." + e.toString());
