@@ -14,11 +14,11 @@ public class User {
 	@GeneratedValue
 	private Integer userid;
 
-	@Column(nullable = false) private String username;
+	@Column(nullable = true) private String username;
 	@Column(nullable = true) private String nickname;
 	@Column(nullable = true) private String idcard;
 	@Column(nullable = false) private String registerphone;
-	@Column(nullable = false) private String password;
+	@Column(nullable = true) private String password;
 	@Column(nullable = true) private String realname;
 	@Column(nullable = true) private String sex;
 	@Column(nullable = true) private String area;

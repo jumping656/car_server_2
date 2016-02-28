@@ -14,10 +14,10 @@ public class Deal {
 	@GeneratedValue
 	private Integer dealid;
 
-	@Column(nullable = false) private Integer userid;
-	@Column(nullable = false) private Integer coachid;
-	@Column(nullable = false) private DEAL_STATE state;
-	@Column(nullable = false) private Integer price;
+	@Column(nullable = true) private Integer userid;
+	@Column(nullable = true) private Integer coachid;
+	@Column(nullable = true) private DEAL_STATE state;
+	@Column(nullable = true) private Integer price;
 	@Column(nullable = true) private String dummy1;
 	@Column(nullable = true) private String dummy2;
 

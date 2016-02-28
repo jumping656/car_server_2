@@ -13,26 +13,24 @@ public class SubjectFour {
 	@Id
 	private Integer id;
 
-	@Column(nullable = true) private Integer chapter;
+	@Column(nullable = true) private Integer achapter;
 	@Lob @Basic(fetch = FetchType.LAZY)
-	@Column(nullable = true) private String question;
+	@Column(nullable = true) private String bquestion;
 	@Lob @Basic(fetch = FetchType.LAZY)
-	@Column(nullable = true) private String option1;
+	@Column(nullable = true) private String coption1;
 	@Lob @Basic(fetch = FetchType.LAZY)
-	@Column(nullable = true) private String option2;
+	@Column(nullable = true) private String doption2;
 	@Lob @Basic(fetch = FetchType.LAZY)
-	@Column(nullable = true) private String option3;
+	@Column(nullable = true) private String eoption3;
 	@Lob @Basic(fetch = FetchType.LAZY)
-	@Column(nullable = true) private String option4;
-	@Column(nullable = true) private Integer answer;
-	@Column(nullable = true) private String image;
-	@Column(nullable = true) private Integer type;
+	@Column(nullable = true) private String foption4;
+	@Column(nullable = true) private Integer ganswer;
+	@Column(nullable = true) private String himage;
+	@Column(nullable = true, name = "`itype`") private Integer itype;
 	@Lob @Basic(fetch = FetchType.LAZY)
-	@Column(nullable = true) private String link;
+	@Column(nullable = true) private String jlink;
 	@Lob @Basic(fetch = FetchType.LAZY)
-	@Column(nullable = true) private String analyze;
-	@Column(nullable = true) private String dummy1;
-	@Column(nullable = true) private String dummy2;
+	@Column(nullable = true, name = "`kanalyze`") private String kanalyze;
 
 	public Integer getId() {
 		return id;
@@ -42,103 +40,91 @@ public class SubjectFour {
 		this.id = id;
 	}
 
-	public Integer getChapter() {
-		return chapter;
+	public Integer getAchapter() {
+		return achapter;
 	}
 
-	public void setChapter(Integer chapter) {
-		this.chapter = chapter;
+	public void setAchapter(Integer achapter) {
+		this.achapter = achapter;
 	}
 
-	public String getQuestion() {
-		return question;
+	public String getBquestion() {
+		return bquestion;
 	}
 
-	public void setQuestion(String question) {
-		this.question = question;
+	public void setBquestion(String bquestion) {
+		this.bquestion = bquestion;
 	}
 
-	public String getOption1() {
-		return option1;
+	public String getCoption1() {
+		return coption1;
 	}
 
-	public void setOption1(String option1) {
-		this.option1 = option1;
+	public void setCoption1(String coption1) {
+		this.coption1 = coption1;
 	}
 
-	public String getOption2() {
-		return option2;
+	public String getDoption2() {
+		return doption2;
 	}
 
-	public void setOption2(String option2) {
-		this.option2 = option2;
+	public void setDoption2(String doption2) {
+		this.doption2 = doption2;
 	}
 
-	public String getOption3() {
-		return option3;
+	public String getEoption3() {
+		return eoption3;
 	}
 
-	public void setOption3(String option3) {
-		this.option3 = option3;
+	public void setEoption3(String eoption3) {
+		this.eoption3 = eoption3;
 	}
 
-	public String getOption4() {
-		return option4;
+	public String getFoption4() {
+		return foption4;
 	}
 
-	public void setOption4(String option4) {
-		this.option4 = option4;
+	public void setFoption4(String foption4) {
+		this.foption4 = foption4;
 	}
 
-	public String getImage() {
-		return image;
+	public Integer getGanswer() {
+		return ganswer;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setGanswer(Integer ganswer) {
+		this.ganswer = ganswer;
 	}
 
-	public void setAnswer(Integer answer) {
-		this.answer = answer;
+	public String getHimage() {
+		return himage;
 	}
 
-	public Integer getType() {
-		return type;
+	public void setHimage(String himage) {
+		this.himage = himage;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
+	public Integer getItype() {
+		return itype;
 	}
 
-	public String getLink() {
-		return link;
+	public void setItype(Integer itype) {
+		this.itype = itype;
 	}
 
-	public void setLink(String link) {
-		this.link = link;
+	public String getJlink() {
+		return jlink;
 	}
 
-	public String getAnalyze() {
-		return analyze;
+	public void setJlink(String jlink) {
+		this.jlink = jlink;
 	}
 
-	public void setAnalyze(String analyze) {
-		this.analyze = analyze;
+	public String getKanalyze() {
+		return kanalyze;
 	}
 
-	public String getDummy1() {
-		return dummy1;
-	}
-
-	public void setDummy1(String dummy1) {
-		this.dummy1 = dummy1;
-	}
-
-	public String getDummy2() {
-		return dummy2;
-	}
-
-	public void setDummy2(String dummy2) {
-		this.dummy2 = dummy2;
+	public void setKanalyze(String kanalyze) {
+		this.kanalyze = kanalyze;
 	}
 }

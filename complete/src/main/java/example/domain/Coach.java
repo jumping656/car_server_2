@@ -16,30 +16,30 @@ public class Coach {
 
 	@Column(nullable = true) private String coachname;
 	@Column(nullable = true) private String nickname;
-	@Column(nullable = false) private String idcard;
+	@Column(nullable = true) private String idcard;
 	@Column(nullable = false) private String registerphone;
-	@Column(nullable = false) private String password;
+	@Column(nullable = true) private String password;
 	@Column(nullable = true) private String realname;
 	@Column(nullable = true) private String sex;
 	@Column(nullable = true) private String area;
 	@Column(nullable = true) private String mail;
 	@Column(nullable = true) private String qq;
 	@Column(nullable = true) private String phone;
-	@Column(nullable = true) private String realage;
+	@Column(nullable = true) private Integer realage;
 	@Column(nullable = true) private Integer age;
-	@Column(nullable = false) private Integer carage;
-	@Column(nullable = false) private String cartype;
-	@Column(nullable = false) private String school;
-	@Column(nullable = false) private String schooladdress;
-	@Column(nullable = false) private String evaluation;   //students evaluation
-	@Column(nullable = false) private Integer exam2cost;
-	@Column(nullable = false) private Integer exam3cost;
-	@Column(nullable = false) private Integer totalcost;
+	@Column(nullable = true) private Integer carage;
+	@Column(nullable = true) private String cartype;
+	@Column(nullable = true) private String school;
+	@Column(nullable = true) private String schooladdress;
+	@Column(nullable = true) private String evaluation;   //students evaluation
+	@Column(nullable = true) private Integer exam2cost;
+	@Column(nullable = true) private Integer exam3cost;
+	@Column(nullable = true) private Integer totalcost;
 	@Column(nullable = true) private String introduction; //personal introduction, optional
 	@Column(nullable = true) private String picture;  //picture URL
-	@Column(nullable = false) private String idcardpicture;
-	@Column(nullable = false) private String coachpicture;
-	@Column(nullable = false) private Boolean verify; //verified or not by admin
+	@Column(nullable = true) private String idcardpicture;
+	@Column(nullable = true) private String coachpicture;
+	@Column(nullable = true) private Boolean verify; //verified or not by admin
 	@Column(nullable = true) private Integer money;   //students evaluation
 	@Column(nullable = true) private String bankaccount;
 	@Column(nullable = true) private Integer sharedtime;
@@ -58,7 +58,7 @@ public class Coach {
 		if (null != coach.getNickname()){ this.setNickname(coach.getNickname()); }
 		if (null != coach.getPassword()){ this.setPassword(coach.getPassword()); }
 		if (null != coach.getPhone()){ this.setPhone(coach.getPhone()); }
-		if (null != coach.getPicture()){ this.setPicture(coach.getPicture()); }
+		//if (null != coach.getPicture()){ this.setPicture(coach.getPicture()); }
 		if (null != coach.getQq()){ this.setQq(coach.getQq()); }
 		if (null != coach.getRealname()){ this.setRealname(coach.getRealname()); }
 		if (null != coach.getSex()){ this.setSex(coach.getSex()); }
@@ -71,8 +71,8 @@ public class Coach {
 		if (null != coach.getExam3cost()){ this.setExam3cost(coach.getExam3cost()); }
 		if (null != coach.getTotalcost()){ this.setTotalcost(coach.getTotalcost()); }
 		if (null != coach.getIntroduction()){ this.setIntroduction(coach.getIntroduction()); }
-		if (null != coach.getIdcardpicture()){ this.setIdcardpicture(coach.getIdcardpicture()); }
-		if (null != coach.getCoachpicture()){ this.setCoachpicture(coach.getCoachpicture()); }
+		//if (null != coach.getIdcardpicture()){ this.setIdcardpicture(coach.getIdcardpicture()); }
+		//if (null != coach.getCoachpicture()){ this.setCoachpicture(coach.getCoachpicture()); }
 	}
 
 	public Integer getCoachid() {
@@ -171,11 +171,11 @@ public class Coach {
 		this.phone = phone;
 	}
 
-	public String getRealage() {
+	public Integer getRealage() {
 		return realage;
 	}
 
-	public void setRealage(String realage) {
+	public void setRealage(Integer realage) {
 		this.realage = realage;
 	}
 

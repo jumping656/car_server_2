@@ -23,78 +23,94 @@ import java.io.File;
 @RestController
 public class UploadController {
 
-	private static final String USERAVATAR_PATH  = "/usr/useravatar/";
-	private static final String COACHAVATAR_PATH = "/usr/coachavatar/";
-	private static final String COACHIDCARD_PATH = "/usr/coachidcard/";
-	private static final String COACHCARD_PATH   = "/usr/coachcard/";
+	//private static final String USERAVATAR_PATH  = "/usr/useravatar/";
+	//private static final String COACHAVATAR_PATH = "/usr/coachavatar/";
+	//private static final String COACHIDCARD_PATH = "/usr/coachidcard/";
+	//private static final String COACHCARD_PATH   = "/usr/coachcard/";
 
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private CoachRepository coachRepository;
 
-	//private static final String FILE_PATH = "C:\\Users\\EJIPING\\repository\\";
+	private static final String USERAVATAR_PATH = "C:\\Users\\EJIPING";
+	private static final String SEPARATOR = "\\";
 	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
 
 	//dispatch different func to handler, return status
 	@RequestMapping(value = UploadRestParamConstants.UPLOAD_FILE, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> uploadFileDispatcher(@PathVariable("registerphone")String registerPhone,
+	public ResponseEntity<Object> uploadFileDispatcher(@PathVariable("registerphone")String registerPhone,
 													   @RequestParam(value="type")String type,
 													   @RequestParam(value="file")MultipartFile file){
 		logger.info("Start uploadFileDispath.");
+		logger.info("type: " + type);
 
 		if (null == file || file.isEmpty()){
 			logger.info("MultipartFile empty");
-			return new ResponseEntity<String>("MultipartFile empty",
+			return new ResponseEntity<Object>("MultipartFile empty",
 					HttpStatus.NOT_FOUND);
 		}
 		if (null == registerPhone || registerPhone.isEmpty()){
 			logger.info("registerPhone empty");
-			return new ResponseEntity<String>("registerPhone empty",
+			return new ResponseEntity<Object>("registerPhone empty",
 					HttpStatus.NOT_FOUND);
 		}
 
 		if (type.equals(UploadRestParamConstants.FILE_TYPE_USERAVATAR))
 		{
-			if (!userAvatarHandler(registerPhone, file)){
-				return new ResponseEntity<String>("upload file failed",
-						HttpStatus.NOT_FOUND);
+			User getUser = userAvatarHandler(registerPhone, file);
+			if (null != getUser){
+				logger.info("upload file successfully, return object!");
+				return new ResponseEntity<Object>(getUser,
+						HttpStatus.OK);
 			}
-		}
-		else if (type.equals(UploadRestParamConstants.FILE_TYPE_COACHAVATAR)){
-			if (!coachAvatarHandler(registerPhone, file)){
-				return new ResponseEntity<String>("upload file failed",
-						HttpStatus.NOT_FOUND);
-			}
-		}
-		else if (type.equals(UploadRestParamConstants.FILE_TYPE_COACHIDCARD)){
-			if (!coachIdCardAvatarHandler(registerPhone, file)){
-				return new ResponseEntity<String>("upload file failed",
-						HttpStatus.NOT_FOUND);
-			}
-		}
-		else if (type.equals(UploadRestParamConstants.FILE_TYPE_COACHCARD)){
-			if (!coachCardAvatarHandler(registerPhone, file)){
-				return new ResponseEntity<String>("upload file failed",
-						HttpStatus.NOT_FOUND);
-			}
-		}
-		else {
-			return new ResponseEntity<String>("file type invalid",
+			return new ResponseEntity<Object>("upload user avatar fail, please check log!",
 					HttpStatus.NOT_FOUND);
 		}
-
-		logger.info("uploadFileDispath Successfully!");
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		else if (type.equals(UploadRestParamConstants.FILE_TYPE_COACHAVATAR)){
+			Coach getCoach = coachAvatarHandler(registerPhone, file);
+			if (null != getCoach){
+				logger.info("upload file successfully, return object!");
+				return new ResponseEntity<Object>(getCoach,
+						HttpStatus.OK);
+			}
+			return new ResponseEntity<Object>("upload coach avatar fail, please check log!",
+					HttpStatus.NOT_FOUND);
+		}
+		else if (type.equals(UploadRestParamConstants.FILE_TYPE_COACHIDCARD)){
+			Coach getCoach = coachIdCardAvatarHandler(registerPhone, file);
+			if (null != getCoach){
+				logger.info("upload file successfully, return object!");
+				return new ResponseEntity<Object>(getCoach,
+						HttpStatus.OK);
+			}
+			return new ResponseEntity<Object>("upload coach id card fail, please check log!",
+					HttpStatus.NOT_FOUND);
+		}
+		else if (type.equals(UploadRestParamConstants.FILE_TYPE_COACHCARD)){
+			Coach getCoach = coachCardAvatarHandler(registerPhone, file);
+			if (null != getCoach){
+				logger.info("upload file successfully, return object!");
+				return new ResponseEntity<Object>(getCoach,
+						HttpStatus.OK);
+			}
+			return new ResponseEntity<Object>("upload coach card fail, please check log!",
+					HttpStatus.NOT_FOUND);
+		}
+		else {
+			return new ResponseEntity<Object>("file type invalid",
+					HttpStatus.NOT_FOUND);
+		}
 	}
 
 	//useravatar handler
-	public boolean userAvatarHandler(String registerphone, MultipartFile file){
+	public User userAvatarHandler(String registerphone, MultipartFile file){
 		String fileName;
 
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-		fileName = registerphone + suffixName;
+		fileName = SEPARATOR + registerphone + suffixName;
+		logger.info("hahaha");
 
 		File dir = new File(USERAVATAR_PATH);
 		if (!dir.exists()) {
@@ -105,14 +121,15 @@ public class UploadController {
 			file.transferTo(new File(dir + fileName));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 
 		//update file path to DB
-		User getUser = userRepository.findByUsername(registerphone);
+		User getUser = userRepository.findByRegisterphone(registerphone);
+		logger.info("registerphone: " + registerphone);
 		if (null == getUser){
 			logger.info("user not exists");
-			return false;
+			return null;
 		}
 		try {
 			getUser.setPicture(dir + fileName);
@@ -120,7 +137,7 @@ public class UploadController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("update user failed." + e.toString());
-			return false;
+			return null;
 		} finally {
 //			try {
 //				conn.close();
@@ -129,17 +146,18 @@ public class UploadController {
 //			}
 		}
 
-		return true;
+		return getUser;
 	}
 
 	//coachavatar handler
-	public boolean coachAvatarHandler(String registerphone, MultipartFile file){
+	public Coach coachAvatarHandler(String registerphone, MultipartFile file){
 		String fileName;
 
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-		fileName = registerphone + suffixName;
+		fileName = SEPARATOR + registerphone + suffixName;
 
-		File dir = new File(COACHAVATAR_PATH);
+		//File dir = new File(COACHAVATAR_PATH);
+		File dir = new File(USERAVATAR_PATH);
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
@@ -148,14 +166,14 @@ public class UploadController {
 			file.transferTo(new File(dir + fileName));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 
 		//update file path to DB
 		Coach getCoach = coachRepository.findByRegisterphone(registerphone);
 		if (null == getCoach){
 			logger.info("coach not exists");
-			return false;
+			return null;
 		}
 		try {
 			getCoach.setPicture(dir + fileName);
@@ -163,7 +181,7 @@ public class UploadController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("update coach failed." + e.toString());
-			return false;
+			return null;
 		} finally {
 //			try {
 //				conn.close();
@@ -172,18 +190,19 @@ public class UploadController {
 //			}
 		}
 
-		return true;
+		return getCoach;
 	}
 
 	//coachidcard handler
-	public boolean coachIdCardAvatarHandler(String registerphone, MultipartFile file){
+	public Coach coachIdCardAvatarHandler(String registerphone, MultipartFile file){
 		String fileName;
 		String separator = "_coachid_";
 
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-		fileName = registerphone + separator + suffixName;
+		fileName = SEPARATOR + registerphone + separator + suffixName;
 
-		File dir = new File(COACHIDCARD_PATH);
+		//File dir = new File(COACHIDCARD_PATH);
+		File dir = new File(USERAVATAR_PATH);
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
@@ -192,14 +211,14 @@ public class UploadController {
 			file.transferTo(new File(dir + fileName));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 
 		//update file path to DB
 		Coach getCoach = coachRepository.findByRegisterphone(registerphone);
 		if (null == getCoach){
 			logger.info("coach not exists");
-			return false;
+			return null;
 		}
 		try {
 			getCoach.setIdcardpicture(dir + fileName);
@@ -207,7 +226,7 @@ public class UploadController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("update coach failed." + e.toString());
-			return false;
+			return null;
 		} finally {
 //			try {
 //				conn.close();
@@ -216,18 +235,19 @@ public class UploadController {
 //			}
 		}
 
-		return true;
+		return getCoach;
 	}
 
 	//coachcard handler
-	public boolean coachCardAvatarHandler(String registerphone, MultipartFile file){
+	public Coach coachCardAvatarHandler(String registerphone, MultipartFile file){
 		String fileName;
 		String separator = "_coachcard_";
 
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-		fileName = registerphone + separator + suffixName;
+		fileName = SEPARATOR + registerphone + separator + suffixName;
 
-		File dir = new File(COACHCARD_PATH);
+		//File dir = new File(COACHCARD_PATH);
+		File dir = new File(USERAVATAR_PATH);
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
@@ -236,14 +256,14 @@ public class UploadController {
 			file.transferTo(new File(dir + fileName));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 
 		//update file path to DB
 		Coach getCoach = coachRepository.findByRegisterphone(registerphone);
 		if (null == getCoach){
 			logger.info("coach not exists");
-			return false;
+			return null;
 		}
 		try {
 			getCoach.setCoachpicture(dir + fileName);
@@ -251,7 +271,7 @@ public class UploadController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("update coach failed." + e.toString());
-			return false;
+			return null;
 		} finally {
 //			try {
 //				conn.close();
@@ -260,6 +280,6 @@ public class UploadController {
 //			}
 		}
 
-		return true;
+		return getCoach;
 	}
 }

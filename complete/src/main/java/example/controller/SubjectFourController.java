@@ -25,7 +25,7 @@ public class SubjectFourController {
 	private SubjectFourRepository subjectFourRepository;
 
 	//get subjectfour by id
-	@RequestMapping(value = SubjectFourRestURIConstants.GET_SUBJECTFOUR_BY_ID, method = RequestMethod.GET)
+	@RequestMapping(value = SubjectFourRestURIConstants.GET_SUBJECTFOUR_BY_ID, method = RequestMethod.POST)
 	@ResponseBody
 	public SubjectFour getSubjectFourById(@RequestBody SubjectFour subjectFour) {
 		if (subjectFour.getId() <= 0 || null == subjectFour.getId()){
@@ -47,13 +47,13 @@ public class SubjectFourController {
 	@RequestMapping(value = SubjectFourRestURIConstants.GET_SUBJECTFOUR_BY_CHAPTER, method = RequestMethod.GET)
 	@ResponseBody
 	public List<SubjectFour> getSubjectFourByChapter(@RequestBody SubjectFour subjectFour) {
-		if (subjectFour.getChapter() <= 0 || null == subjectFour.getChapter()){
+		if (subjectFour.getAchapter() <= 0 || null == subjectFour.getAchapter()){
 			logger.info("chapter id is invalid");
 			return null;
 		}
-		logger.info("Start getSubjectFour. chapter= " + subjectFour.getChapter());
+		logger.info("Start getSubjectFour. chapter= " + subjectFour.getAchapter());
 
-		List<SubjectFour> getSubjectFourList = subjectFourRepository.findByChapter(subjectFour.getChapter());
+		List<SubjectFour> getSubjectFourList = subjectFourRepository.findByAchapter(subjectFour.getAchapter());
 		if (null == getSubjectFourList){
 			return null;
 		}
@@ -66,13 +66,13 @@ public class SubjectFourController {
 	@RequestMapping(value = SubjectFourRestURIConstants.GET_SUBJECTFOUR_BY_TYPE, method = RequestMethod.GET)
 	@ResponseBody
 	public List<SubjectFour> getSubjectFourByType(@RequestBody SubjectFour subjectFour) {
-		if (subjectFour.getType() <= 0 || null == subjectFour.getType()){
+		if (subjectFour.getItype() <= 0 || null == subjectFour.getItype()){
 			logger.info("type id is invalid");
 			return null;
 		}
-		logger.info("Start getSubjectFour. type= " + subjectFour.getType());
+		logger.info("Start getSubjectFour. type= " + subjectFour.getItype());
 
-		List<SubjectFour> getSubjectFourList = subjectFourRepository.findByType(subjectFour.getType());
+		List<SubjectFour> getSubjectFourList = subjectFourRepository.findByItype(subjectFour.getItype());
 		if (null == getSubjectFourList){
 			return null;
 		}

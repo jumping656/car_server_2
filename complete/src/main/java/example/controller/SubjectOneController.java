@@ -26,7 +26,7 @@ public class SubjectOneController {
 	private SubjectOneRepository subjectOneRepository;
 
 	//get subjectone by id
-	@RequestMapping(value = SubjectOneRestURIConstants.GET_SUBJECTONE_BY_ID, method = RequestMethod.GET)
+	@RequestMapping(value = SubjectOneRestURIConstants.GET_SUBJECTONE_BY_ID, method = RequestMethod.POST)
 	@ResponseBody
 	public SubjectOne getSubjectOneById(@RequestBody SubjectOne subjectOne) {
 		if (subjectOne.getId() <= 0 || null == subjectOne.getId()){
@@ -48,13 +48,13 @@ public class SubjectOneController {
 	@RequestMapping(value = SubjectOneRestURIConstants.GET_SUBJECTONE_BY_CHAPTER, method = RequestMethod.GET)
 	@ResponseBody
 	public List<SubjectOne> getSubjectOneByChapter(@RequestBody SubjectOne subjectOne) {
-		if (subjectOne.getChapter() <= 0 || null == subjectOne.getChapter()){
+		if (subjectOne.getAchapter() <= 0 || null == subjectOne.getAchapter()){
 			logger.info("chapter id is invalid");
 			return null;
 		}
-		logger.info("Start getSubjectFour. chapter= " + subjectOne.getChapter());
+		logger.info("Start getSubjectFour. chapter= " + subjectOne.getAchapter());
 
-		List<SubjectOne> getSubjectOneList = subjectOneRepository.findByChapter(subjectOne.getChapter());
+		List<SubjectOne> getSubjectOneList = subjectOneRepository.findByAchapter(subjectOne.getAchapter());
 		if (null == getSubjectOneList){
 			return null;
 		}

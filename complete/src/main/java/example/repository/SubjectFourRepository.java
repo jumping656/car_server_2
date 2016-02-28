@@ -12,7 +12,7 @@ public interface SubjectFourRepository extends CrudRepository<SubjectFour, Long>
 
 	SubjectFour findById(Integer id);
 
-	List<SubjectFour> findByType(Integer type);
+	List<SubjectFour> findByItype(Integer type);
 
-	List<SubjectFour> findByChapter(Integer chapter);
+	List<SubjectFour> findByAchapter(Integer chapter);
 }

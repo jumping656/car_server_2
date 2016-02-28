@@ -29,19 +29,19 @@ public class UserController {
 	//first time register only with registerphone
 	@RequestMapping(value = UserRestURIConstants.CREATE_USER, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> createUser(@RequestBody User user) {
+	public ResponseEntity<Object> createUser(@RequestBody User user) {
 		logger.info("Start createUser.");
 
 		if (user.getRegisterphone().isEmpty() || null == user.getRegisterphone()){
 			logger.info("register phone is empty");
-			return new ResponseEntity<String>("register phone is empty",
+			return new ResponseEntity<Object>("register phone is empty",
 					HttpStatus.NOT_FOUND);
 		}
 
 		User getUser = userRepository.findByRegisterphone(user.getRegisterphone());
 		if (null != getUser){
 			logger.info("register phone already exists");
-			return new ResponseEntity<String>("register phone already exists",
+			return new ResponseEntity<Object>("register phone already exists",
 					HttpStatus.CONFLICT);
 		}
 
@@ -50,7 +50,8 @@ public class UserController {
 			userRepository.save(user);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("save user failed." + e.toString());
+			logger.info("create user failed!");
+			return new ResponseEntity<Object>("fail to create user.", HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
 //				conn.close();
@@ -60,19 +61,25 @@ public class UserController {
 		}
 
 		logger.info("create user Successfully!");
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		return new ResponseEntity<Object>(user, HttpStatus.OK);
 	}
 
 	//update user
 	@RequestMapping(value = UserRestURIConstants.UPDATE_USER, method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<String> updateUser(@RequestBody User user) {
+	public ResponseEntity<Object> updateUser(@RequestBody User user) {
 		logger.info("Start updateUser.");
 
-		User getUser = userRepository.findByUsername(user.getUsername());
+		if (user.getUserid() <= 0 || null == user.getUserid()){
+			logger.info("userid empty");
+			return new ResponseEntity<Object>("userid is empty",
+					HttpStatus.NOT_FOUND);
+		}
+
+		User getUser = userRepository.findByUserid(user.getUserid());
 		if (null == getUser){
 			logger.info("user not exists");
-			return new ResponseEntity<String>("user not exists",
+			return new ResponseEntity<Object>("user not exists",
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -87,7 +94,7 @@ public class UserController {
 			userRepository.save(getUser);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("update user failed." + e.toString());
+			return new ResponseEntity<Object>("fail to update user.", HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
 //				conn.close();
@@ -97,25 +104,25 @@ public class UserController {
 		}
 
 		logger.info("update user Successfully!");
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		return new ResponseEntity<Object>(getUser, HttpStatus.OK);
 	}
 
 	//delete user
 	@RequestMapping(value = UserRestURIConstants.DELETE_USER, method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseEntity<String> deleteUser(@RequestBody User user) {
+	public ResponseEntity<Object> deleteUser(@RequestBody User user) {
 		logger.info("Start deleteUser.");
 
 		if (null == user.getUserid() || user.getUserid() <= 0){
 			logger.info("userid invalid");
-			return new ResponseEntity<String>("userid invalid",
+			return new ResponseEntity<Object>("userid invalid",
 					HttpStatus.NOT_FOUND);
 		}
 
 		User getUser = userRepository.findByUserid(user.getUserid());
 		if (null == getUser){
 			logger.info("user not exists");
-			return new ResponseEntity<String>("user not exists",
+			return new ResponseEntity<Object>("user not exists",
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -133,40 +140,45 @@ public class UserController {
 		}
 
 		logger.info("delete user Successfully!");
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		return new ResponseEntity<Object>("user deleted.", HttpStatus.OK);
 	}
 
-	//get user by registerphone
-	@RequestMapping(value = UserRestURIConstants.GET_USER, method = RequestMethod.GET)
+	//get user by userid
+	@RequestMapping(value = UserRestURIConstants.GET_USER, method = RequestMethod.POST)
 	@ResponseBody
-	public User getUser(@RequestBody User user) {
-		if (user.getRegisterphone().isEmpty() || null == user.getRegisterphone()){
-			logger.info("register phone is empty");
-			return null;
+	public ResponseEntity<Object> getUser(@RequestBody User user) {
+		if (null == user.getUserid() || user.getUserid() <= 0){ //null == user.getUserid() must be ahead of <=0, or will be NullPointerException
+			logger.info("userid is empty");
+			return new ResponseEntity<Object>("userid invalid",
+					HttpStatus.NOT_FOUND);
 		}
-		logger.info("Start getUser. Registerphone= " + user.getRegisterphone());
+		logger.info("Start getUser. userid= " + user.getUserid());
 
-		User getUser = userRepository.findByRegisterphone(user.getRegisterphone());
+		User getUser = userRepository.findByUserid(user.getUserid());
 		if (null == getUser){
-			return null;
+			logger.info("user not found!");
+			return new ResponseEntity<Object>("userid invalid",
+					HttpStatus.NOT_FOUND);
 		}
 
 		logger.info("get user Successfully!");
-		return getUser;
+		return new ResponseEntity<Object>(getUser, HttpStatus.OK);
 	}
 
 	//get all users
 	@RequestMapping(value = UserRestURIConstants.GET_ALL_USER, method = RequestMethod.GET)
 	@ResponseBody
-	public List<User> getAllUsers(@RequestBody User user) {
+	public ResponseEntity<Object> getAllUsers() {
 		logger.info("Start getUsers.");
 
-		List<User> getUser = userRepository.findAll();
-		if (null == getUser){
-			return null;
+		List<User> getUserList = userRepository.findAll();
+		if (getUserList.isEmpty()){
+			logger.info("no user");
+			return new ResponseEntity<Object>("no user found",
+					HttpStatus.NOT_FOUND);
 		}
 
 		logger.info("get all users Successfully!");
-		return getUser;
+		return new ResponseEntity<Object>(getUserList, HttpStatus.OK);
 	}
 }

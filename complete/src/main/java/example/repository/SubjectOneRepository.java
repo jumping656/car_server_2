@@ -14,5 +14,5 @@ public interface SubjectOneRepository extends CrudRepository<SubjectOne, Long> {
 
 	//List<SubjectFour> findByType(Integer type);
 
-	List<SubjectOne> findByChapter(Integer chapter);
+	List<SubjectOne> findByAchapter(Integer chapter);
 }
