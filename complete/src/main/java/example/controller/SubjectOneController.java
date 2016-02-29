@@ -1,11 +1,12 @@
 package example.controller;
 
-import example.domain.SubjectFour;
 import example.domain.SubjectOne;
 import example.repository.SubjectOneRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,53 +29,61 @@ public class SubjectOneController {
 	//get subjectone by id
 	@RequestMapping(value = SubjectOneRestURIConstants.GET_SUBJECTONE_BY_ID, method = RequestMethod.POST)
 	@ResponseBody
-	public SubjectOne getSubjectOneById(@RequestBody SubjectOne subjectOne) {
-		if (subjectOne.getId() <= 0 || null == subjectOne.getId()){
+	public ResponseEntity<Object> getSubjectOneById(@RequestBody SubjectOne subjectOne) {
+		if (null == subjectOne.getId() || subjectOne.getId() <= 0){
 			logger.info("id is invalid");
-			return null;
+			return new ResponseEntity<Object>("id invalid",
+					HttpStatus.NOT_FOUND);
 		}
 		logger.info("Start getSubjectOne. id= " + subjectOne.getId());
 
 		SubjectOne getSubjectOne = subjectOneRepository.findById(subjectOne.getId());
 		if (null == getSubjectOne){
-			return null;
+			logger.info("subject one not found!");
+			return new ResponseEntity<Object>("subject one not found!",
+					HttpStatus.NOT_FOUND);
 		}
 
 		logger.info("get subjectOne Successfully!");
-		return getSubjectOne;
+		return new ResponseEntity<Object>(getSubjectOne, HttpStatus.OK);
 	}
 
 	//get subjectone by chapter
-	@RequestMapping(value = SubjectOneRestURIConstants.GET_SUBJECTONE_BY_CHAPTER, method = RequestMethod.GET)
+	@RequestMapping(value = SubjectOneRestURIConstants.GET_SUBJECTONE_BY_CHAPTER, method = RequestMethod.POST)
 	@ResponseBody
-	public List<SubjectOne> getSubjectOneByChapter(@RequestBody SubjectOne subjectOne) {
-		if (subjectOne.getAchapter() <= 0 || null == subjectOne.getAchapter()){
+	public ResponseEntity<Object> getSubjectOneByChapter(@RequestBody SubjectOne subjectOne) {
+		if (null == subjectOne.getAchapter() || subjectOne.getAchapter() <= 0){
 			logger.info("chapter id is invalid");
-			return null;
+			return new ResponseEntity<Object>("chapter id is invalid!",
+					HttpStatus.NOT_FOUND);
 		}
 		logger.info("Start getSubjectFour. chapter= " + subjectOne.getAchapter());
 
 		List<SubjectOne> getSubjectOneList = subjectOneRepository.findByAchapter(subjectOne.getAchapter());
-		if (null == getSubjectOneList){
-			return null;
+		if (getSubjectOneList.isEmpty()){
+			logger.info("subject one not found!");
+			return new ResponseEntity<Object>("subject one not found!",
+					HttpStatus.NOT_FOUND);
 		}
 
 		logger.info("get subjectOne Successfully!");
-		return getSubjectOneList;
+		return new ResponseEntity<Object>(getSubjectOneList, HttpStatus.OK);
 	}
 
 	//get all subjectone
 	@RequestMapping(value = SubjectOneRestURIConstants.GET_ALL_SUBJECTONE, method = RequestMethod.GET)
 	@ResponseBody
-	public List<SubjectOne> getAllSubjectOne(@RequestBody SubjectFour subjectFour) {
+	public ResponseEntity<Object> getAllSubjectOne() {
 		logger.info("Start getAllSubjectOne.");
 
 		List<SubjectOne> getSubjectOneList = subjectOneRepository.findAll();
-		if (null == getSubjectOneList){
-			return null;
+		if (getSubjectOneList.isEmpty()){
+			logger.info("subject one not found!");
+			return new ResponseEntity<Object>("subject one not found!",
+					HttpStatus.NOT_FOUND);
 		}
 
 		logger.info("get all subjectOne Successfully!");
-		return getSubjectOneList;
+		return new ResponseEntity<Object>(getSubjectOneList, HttpStatus.OK);
 	}
 }
