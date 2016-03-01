@@ -15,8 +15,8 @@ public class ErrorQuestion {
 	private Integer errorid;
 
 	@Column(nullable = false) private Integer userid;
-	@Column(nullable = false) private Integer subjectoneid;
-	@Column(nullable = false) private Integer subjectfourid;
+	@Column(nullable = true) private Integer subjectoneid;
+	@Column(nullable = true) private Integer subjectfourid;
 	@Column(nullable = true) private String dummy1;
 	@Column(nullable = true) private String dummy2;
 

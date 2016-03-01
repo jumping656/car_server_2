@@ -45,7 +45,7 @@ public class ErrorController {
 		}
 
 		try {
-			errorQuestion.setSubjectfourid(0);
+			errorQuestion.setSubjectfourid(null);
 			errorRepository.save(errorQuestion);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,7 +87,7 @@ public class ErrorController {
 		}
 
 		try {
-			errorQuestion.setSubjectoneid(0);
+			errorQuestion.setSubjectoneid(null);
 			errorRepository.save(errorQuestion);
 		} catch (Exception e) {
 			e.printStackTrace();

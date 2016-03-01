@@ -45,7 +45,7 @@ public class CollectionController {
 		}
 
 		try {
-			collection.setSubjectfourid(0);
+			collection.setSubjectfourid(null);
 			collectionRepository.save(collection);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,7 +87,7 @@ public class CollectionController {
 		}
 
 		try {
-			collection.setSubjectoneid(0);
+			collection.setSubjectoneid(null);
 			collectionRepository.save(collection);
 		} catch (Exception e) {
 			e.printStackTrace();
