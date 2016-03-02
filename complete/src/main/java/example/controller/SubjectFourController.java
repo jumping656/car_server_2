@@ -108,4 +108,37 @@ public class SubjectFourController {
 		logger.info("get all subjectFour Successfully!");
 		return new ResponseEntity<Object>(getSubjectFourList, HttpStatus.OK);
 	}
+
+	//get subject four exam, 45 single choice and 5 multiple choice
+	@RequestMapping(value = SubjectFourRestURIConstants.GET_EXAM, method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<Object> getExam() {
+		logger.info("Start getExam.");
+		Integer type1 = 1;
+		Integer type2 = 2;
+		Integer type3 = 3; //single choice with mp4
+		Integer singleNum = 45;
+		Integer multiNum = 5;
+
+		List<SubjectFour> listType1 = null;
+		List<SubjectFour> listType2 = null;
+		List<SubjectFour> listType3 = null;
+		List<SubjectFour> listExam = null;
+
+		listType1 = subjectFourRepository.findByItype(type1);
+		listType2 = subjectFourRepository.findByItype(type2);
+		listType3 = subjectFourRepository.findByItype(type3);
+
+		listType1.addAll(listType2);
+		listExam = SubjectFour.pickNRandom(listType1, singleNum);
+		listExam.addAll(SubjectFour.pickNRandom(listType3, multiNum));
+		if (listExam.isEmpty()){
+			logger.info("exam not found!");
+			return new ResponseEntity<Object>("exam not found!",
+					HttpStatus.NOT_FOUND);
+		}
+
+		logger.info("get exam Successfully!");
+		return new ResponseEntity<Object>(listExam, HttpStatus.OK);
+	}
 }

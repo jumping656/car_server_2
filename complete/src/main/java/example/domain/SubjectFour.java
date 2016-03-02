@@ -1,6 +1,9 @@
 package example.domain;
 
 import javax.persistence.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by ejiping on 2016/2/19.
@@ -31,6 +34,12 @@ public class SubjectFour {
 	@Column(nullable = true) private String jlink;
 	@Lob @Basic(fetch = FetchType.LAZY)
 	@Column(nullable = true, name = "`kanalyze`") private String kanalyze;
+
+	public static List<SubjectFour> pickNRandom(List<SubjectFour> lst, int n) {
+		List<SubjectFour> copy = new LinkedList<SubjectFour>(lst);
+		Collections.shuffle(copy);
+		return copy.subList(0, n);
+	}
 
 	public Integer getId() {
 		return id;
