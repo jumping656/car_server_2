@@ -129,9 +129,9 @@ public class SubjectFourController {
 		listType2 = subjectFourRepository.findByItype(type2);
 		listType3 = subjectFourRepository.findByItype(type3);
 
-		listType1.addAll(listType2);
+		listType1.addAll(listType3);
 		listExam = SubjectFour.pickNRandom(listType1, singleNum);
-		listExam.addAll(SubjectFour.pickNRandom(listType3, multiNum));
+		listExam.addAll(SubjectFour.pickNRandom(listType2, multiNum));
 		if (listExam.isEmpty()){
 			logger.info("exam not found!");
 			return new ResponseEntity<Object>("exam not found!",
