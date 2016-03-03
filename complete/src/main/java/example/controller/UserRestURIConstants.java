@@ -11,4 +11,5 @@ public class UserRestURIConstants {
 	public static final String CREATE_USER  = "/car/user/create";
 	public static final String UPDATE_USER  = "/car/user/update";
 	public static final String DELETE_USER  = "/car/user/delete";
+	public static final String USER_LOGIN   = "/car/user/login";
 }

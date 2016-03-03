@@ -47,7 +47,7 @@ public class User {
 		if (null != user.getMail()){ this.setMail(user.getMail()); }
 		if (null != user.getMoney()){ this.setMoney(user.getMoney()); }
 		if (null != user.getNickname()){ this.setNickname(user.getNickname()); }
-		if (null != user.getPassword()){ this.setPassword(user.getPassword()); }
+		//if (null != user.getPassword()){ this.setPassword(user.getPassword()); }
 		if (null != user.getPhone()){ this.setPhone(user.getPhone()); }
 		//if (null != user.getPicture()){ this.setPicture(user.getPicture()); }
 		if (null != user.getQq()){ this.setQq(user.getQq()); }
