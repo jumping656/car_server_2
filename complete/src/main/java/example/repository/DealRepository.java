@@ -10,9 +10,11 @@ public interface DealRepository extends CrudRepository<Deal, Long> {
 
 	List<Deal> findAll();
 
-	Deal findByUserid(Integer userid);
+	List<Deal> findByUserid(Integer userid);
 
-	Deal findByCoachid(Integer coachid);
+	List<Deal> findByCoachid(Integer coachid);
 
 	Deal findByDealid(Integer dealid);
+
+	List<Deal> findByUseridAndState(Integer userid, Deal.DEAL_STATE deal_state);
 }

@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -34,15 +36,18 @@ public class DealController {
 					HttpStatus.NOT_FOUND);
 		}
 
-		Deal getDeal = dealRepository.findByDealid(deal.getDealid());
-		if (null != getDeal){
-			logger.info("dealid exists");
-			return new ResponseEntity<Object>("dealid exists",
+		List<Deal> getDealList= dealRepository.findByUseridAndState(deal.getUserid(), Deal.DEAL_STATE.ONGOING);
+		if (!getDealList.isEmpty()){
+			logger.info("user ongoing deal exits");
+			return new ResponseEntity<Object>("user ongoing deal exits",
 					HttpStatus.CONFLICT);
 		}
 
 		try {
 			deal.setState(Deal.DEAL_STATE.ONGOING);
+			//get current time
+			String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+			deal.setDate(timeStamp);
 			dealRepository.save(deal);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -163,6 +168,50 @@ public class DealController {
 
 		logger.info("get deal Successfully!");
 		return new ResponseEntity<Object>(getDeal, HttpStatus.OK);
+	}
+
+	//get deal by coachid
+	@RequestMapping(value = DealRestURIConstants.GET_DEAL_BY_COACH, method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<Object> getDealByCoachid(@PathVariable("coachid")Integer coachid) {
+		if (null == coachid || coachid <= 0){
+			logger.info("coachid is empty");
+			return new ResponseEntity<Object>("coachid is empty!",
+					HttpStatus.NOT_FOUND);
+		}
+		logger.info("Start getDeals.coachid= " + coachid);
+
+		List<Deal> getDealList = dealRepository.findByCoachid(coachid);
+		if (getDealList.isEmpty()){
+			logger.info("deal not found!");
+			return new ResponseEntity<Object>("deal not found!",
+					HttpStatus.NOT_FOUND);
+		}
+
+		logger.info("get deal Successfully!");
+		return new ResponseEntity<Object>(getDealList, HttpStatus.OK);
+	}
+
+	//get deal by userid
+	@RequestMapping(value = DealRestURIConstants.GET_DEAL_BY_USER, method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<Object> getDealByUserid(@PathVariable("userid")Integer userid) {
+		if (null == userid || userid <= 0){
+			logger.info("userid is empty");
+			return new ResponseEntity<Object>("userid is empty!",
+					HttpStatus.NOT_FOUND);
+		}
+		logger.info("Start getDeals.userid= " + userid);
+
+		List<Deal> getDealList = dealRepository.findByUserid(userid);
+		if (getDealList.isEmpty()){
+			logger.info("deal not found!");
+			return new ResponseEntity<Object>("deal not found!",
+					HttpStatus.NOT_FOUND);
+		}
+
+		logger.info("get deal Successfully!");
+		return new ResponseEntity<Object>(getDealList, HttpStatus.OK);
 	}
 
 	//get all deals

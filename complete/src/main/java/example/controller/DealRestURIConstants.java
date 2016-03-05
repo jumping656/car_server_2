@@ -11,4 +11,6 @@ public class DealRestURIConstants {
 	public static final String CREATE_DEAL  = "/car/deal/create";
 	public static final String UPDATE_DEAL  = "/car/deal/update";
 	public static final String DELETE_DEAL  = "/car/deal/delete";
+	public static final String GET_DEAL_BY_COACH = "/car/deal/get/coach/{coachid}";
+	public static final String GET_DEAL_BY_USER  = "/car/deal/get/user/{userid}";
 }

@@ -18,6 +18,7 @@ public class Deal {
 	@Column(nullable = true) private Integer coachid;
 	@Column(nullable = true) private DEAL_STATE state;
 	@Column(nullable = true) private Integer price;
+	@Column(nullable = true) private String date;
 	@Column(nullable = true) private String dummy1;
 	@Column(nullable = true) private String dummy2;
 
@@ -68,6 +69,14 @@ public class Deal {
 
 	public void setPrice(Integer price) {
 		this.price = price;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	public String getDummy1() {
