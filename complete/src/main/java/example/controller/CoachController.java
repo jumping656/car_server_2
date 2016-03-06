@@ -1,6 +1,7 @@
 package example.controller;
 
 import example.domain.Coach;
+import example.domain.Md5;
 import example.repository.CoachRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +23,12 @@ public class CoachController {
 	private CoachRepository coachRepository;
 
 	//first time register only with registerphone
-	@RequestMapping(value = CoachRestURIConstants.CREATE_COACH, method = RequestMethod.POST)
+	@RequestMapping(value = CoachRestURIConstants.CREATE_COACH, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ResponseBody
-	public ResponseEntity<Object> createCoach(@RequestBody Coach coach) {
+	public ResponseEntity<Object> createCoach(@ModelAttribute Coach coach) {
 		logger.info("Start createCoach.");
 
-		if (coach.getRegisterphone().isEmpty() || null == coach.getRegisterphone()){
+		if (null == coach.getRegisterphone() || coach.getRegisterphone().isEmpty()){
 			logger.info("register phone is empty");
 			return new ResponseEntity<Object>("register phone is empty",
 					HttpStatus.NOT_FOUND);
@@ -41,8 +42,10 @@ public class CoachController {
 		}
 
 		try {
-			coach.setVerify(false);
-			coachRepository.save(coach);
+			Coach coachTmp = new Coach();
+			coachTmp.setRegisterphone(coach.getRegisterphone());
+			coachTmp.setVerify(false);
+			coachRepository.save(coachTmp);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("create coach failed!");
@@ -60,9 +63,9 @@ public class CoachController {
 	}
 
 	//update coach
-	@RequestMapping(value = CoachRestURIConstants.UPDATE_COACH, method = RequestMethod.PUT)
+	@RequestMapping(value = CoachRestURIConstants.UPDATE_COACH, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ResponseBody
-	public ResponseEntity<Object> updateCoach(@RequestBody Coach coach) {
+	public ResponseEntity<Object> updateCoach(@ModelAttribute Coach coach) {
 		logger.info("Start updateCoach.");
 
 		if (coach.getCoachid() <= 0  || null == coach.getCoachid()){
@@ -79,6 +82,11 @@ public class CoachController {
 		}
 
 		try {
+			if (null != coach.getPassword() && "" != coach.getPassword()){
+				String md5String = Md5.getMD5Str(coach.getPassword());
+				getCoach.setPassword(md5String);
+			}
+
 			getCoach.updateAllowedAttribute(coach);
 
 			//first time update to set
@@ -103,9 +111,9 @@ public class CoachController {
 	}
 
 	//delete coach
-	@RequestMapping(value = CoachRestURIConstants.DELETE_COACH, method = RequestMethod.DELETE)
+	@RequestMapping(value = CoachRestURIConstants.DELETE_COACH, method = RequestMethod.DELETE, headers = "content-type=application/x-www-form-urlencoded")
 	@ResponseBody
-	public ResponseEntity<Object> deleteUser(@RequestBody Coach coach) {
+	public ResponseEntity<Object> deleteUser(@ModelAttribute Coach coach) {
 		logger.info("Start deleteCoach.");
 
 		if (null == coach.getCoachid() || coach.getCoachid() <= 0){
@@ -141,9 +149,9 @@ public class CoachController {
 	}
 
 	//get coach by coachid
-	@RequestMapping(value = CoachRestURIConstants.GET_COACH, method = RequestMethod.POST)
+	@RequestMapping(value = CoachRestURIConstants.GET_COACH, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ResponseBody
-	public ResponseEntity<Object> getCoach(@RequestBody Coach coach) {
+	public ResponseEntity<Object> getCoach(@ModelAttribute Coach coach) {
 		if (null == coach.getCoachid() || coach.getCoachid() <= 0){
 			logger.info("coachid is empty");
 			return new ResponseEntity<Object>("coachid invalid",

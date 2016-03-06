@@ -28,14 +28,14 @@ public class UserController {
 	private UserRepository userRepository;
 
 	//first time register only with registerphone
-	@RequestMapping(value = UserRestURIConstants.CREATE_USER, method = RequestMethod.POST)
+	@RequestMapping(value = UserRestURIConstants.CREATE_USER, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ResponseBody
-	public ResponseEntity<Object> createUser(@RequestBody User user) {
+	public ResponseEntity<Object> createUser(@ModelAttribute User user) {
 		logger.info("Start createUser.");
 
 		if (null == user.getRegisterphone() || user.getRegisterphone().isEmpty()){
 			logger.info("register phone is empty");
-			return new ResponseEntity<Object>("register phone is empty",
+			return new ResponseEntity<Object>(user,
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -47,8 +47,10 @@ public class UserController {
 		}
 
 		try {
-			user.setVerify(false);
-			userRepository.save(user);
+			User userTmp = new User();
+			userTmp.setRegisterphone(user.getRegisterphone());
+			userTmp.setVerify(false);
+			userRepository.save(userTmp);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("create user failed!");
@@ -66,9 +68,9 @@ public class UserController {
 	}
 
 	//update user
-	@RequestMapping(value = UserRestURIConstants.UPDATE_USER, method = RequestMethod.PUT)
+	@RequestMapping(value = UserRestURIConstants.UPDATE_USER, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ResponseBody
-	public ResponseEntity<Object> updateUser(@RequestBody User user) {
+	public ResponseEntity<Object> updateUser(@ModelAttribute User user) {
 		logger.info("Start updateUser.");
 
 		if (null == user.getUserid() || user.getUserid() <= 0){
@@ -86,18 +88,18 @@ public class UserController {
 
 		try {
 			//check username
-			if (null == getUser.getUsername() || getUser.getUsername().equals("")){
-				getUser.setUsername(user.getUsername());
-			}
+//			if (null == getUser.getUsername() || getUser.getUsername().equals("")){
+//				getUser.setUsername(user.getUsername());
+//			}
 			//check updated username unique
-			else{
+//			else{
 				User userTmp = userRepository.findByUsername(user.getUsername());
 				if (null != userTmp){
 					logger.info("username already exits");
 					return new ResponseEntity<Object>("username already exits", HttpStatus.CONFLICT);
 				}
 				getUser.setUsername(user.getUsername());
-			}
+//			}
 			getUser.updateAllowedAttribute(user);
 
 			if (null != user.getPassword() && "" != user.getPassword()){
@@ -127,9 +129,9 @@ public class UserController {
 	}
 
 	//delete user
-	@RequestMapping(value = UserRestURIConstants.DELETE_USER, method = RequestMethod.DELETE)
+	@RequestMapping(value = UserRestURIConstants.DELETE_USER, method = RequestMethod.DELETE, headers = "content-type=application/x-www-form-urlencoded")
 	@ResponseBody
-	public ResponseEntity<Object> deleteUser(@RequestBody User user) {
+	public ResponseEntity<Object> deleteUser(@ModelAttribute User user) {
 		logger.info("Start deleteUser.");
 
 		if (null == user.getUserid() || user.getUserid() <= 0){
@@ -163,9 +165,9 @@ public class UserController {
 	}
 
 	//get user by userid
-	@RequestMapping(value = UserRestURIConstants.GET_USER, method = RequestMethod.POST)
+	@RequestMapping(value = UserRestURIConstants.GET_USER, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ResponseBody
-	public ResponseEntity<Object> getUser(@RequestBody User user) {
+	public ResponseEntity<Object> getUser(@ModelAttribute User user) {
 		if (null == user.getUserid() || user.getUserid() <= 0){ //null == user.getUserid() must be ahead of <=0, or will be NullPointerException
 			logger.info("userid is empty");
 			return new ResponseEntity<Object>("userid invalid",
@@ -202,9 +204,9 @@ public class UserController {
 	}
 
 	//user login by registerphone or username
-	@RequestMapping(value = UserRestURIConstants.USER_LOGIN, method = RequestMethod.POST)
+	@RequestMapping(value = UserRestURIConstants.USER_LOGIN, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ResponseBody
-	public ResponseEntity<Object> userLogin(@RequestBody User user) {
+	public ResponseEntity<Object> userLogin(@ModelAttribute User user) {
 		String loginKey = null;
 		User getUser = null;
 		//check params
@@ -215,12 +217,12 @@ public class UserController {
 		}
 
 		if (null != user.getRegisterphone() && "" != user.getRegisterphone()){
-			logger.info("password empty");
+			logger.info("login by registerphone");
 			loginKey = user.getRegisterphone();
 			getUser = userRepository.findByRegisterphone(loginKey);
 		}
 		else if (null != user.getUsername() && "" != user.getUsername()){
-			logger.info("password empty");
+			logger.info("login by username");
 			loginKey =  user.getUsername();
 			getUser = userRepository.findByUsername(loginKey);
 		}
