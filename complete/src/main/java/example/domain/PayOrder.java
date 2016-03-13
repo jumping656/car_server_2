@@ -4,10 +4,7 @@ import alipay.config.AlipayConfig;
 import alipay.sign.RSA;
 import alipay.util.Constants;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -21,18 +18,20 @@ import java.util.Random;
 public class PayOrder {
 
 	@Id
-	private Integer out_trade_no; //支付订单唯一编号
+	@GeneratedValue
+	private Integer payorderid;
 
-	@Column(nullable = true) private Integer total_fee;      //总付款金额,移动端提供
-	@Column(nullable = true) private Integer price;      //商品单价，本系统可以不用，使用上面的总付款金额
-	@Column(nullable = true) private String statusCode;     //操作状态代码，0-未支付，10-已支付，4000-退款中，5000-已退款，6000-付款失败，6001-取消付款，7000-已消费
+	@Column(nullable = false) private String out_trade_no; //支付订单唯一编号
+    @Column(nullable = true) private Integer total_fee;   //总付款金额,移动端提供
+	@Column(nullable = true) private Integer price;       //商品单价，本系统可以不用，使用上面的总付款金额
+	@Column(nullable = true) private String statusCode;   //操作状态代码，0-未支付，10-已支付，4000-退款中，5000-已退款，6000-付款失败，6001-取消付款，7000-已消费
 	@Column(nullable = true) private String orderNo;      //支付宝交易流水号，可空
-	@Column(nullable = true) private String isRefund;      //是否申请退款，可空
-	@Column(nullable = true) private String createTime;     //创建时间，可空
-	@Column(nullable = true) private String modifyTime;     //修改时间，可空
-	@Column(nullable = true) private String buyer_email;      //买家支付宝账号，可空
-	@Column(nullable = true) private int quantity;       //购买数量，可空
-	//@Column(nullable = true) private Integer dealid;   //对应的deal id  ，必须有, 移动端提供
+	@Column(nullable = true) private String isRefund;     //是否申请退款，可空,暂时不用
+	@Column(nullable = true) private String createTime;   //创建时间，可空
+	@Column(nullable = true) private String modifyTime;   //修改时间，可空
+	@Column(nullable = true) private String buyer_email;  //买家支付宝账号，可空
+	@Column(nullable = true) private int quantity;        //购买数量，可空
+	//@Column(nullable = true) private Integer dealid;    //对应的deal id, 必须有, 移动端提供
 	@Column(nullable = true) private String subject; //商品名称， 可空,移动端提供
 	@Column(nullable = true) private String body; //商品详情，可空,移动端提供
 
@@ -124,11 +123,19 @@ public class PayOrder {
 		return "sign_type=\"RSA\"";
 	}
 
-	public Integer getOut_trade_no() {
+	public Integer getPayorderid() {
+		return payorderid;
+	}
+
+	public void setPayorderid(Integer payorderid) {
+		this.payorderid = payorderid;
+	}
+
+	public String getOut_trade_no() {
 		return out_trade_no;
 	}
 
-	public void setOut_trade_no(Integer out_trade_no) {
+	public void setOut_trade_no(String out_trade_no) {
 		this.out_trade_no = out_trade_no;
 	}
 

@@ -29,8 +29,7 @@ public class DealController {
 		logger.info("Start createDeal.");
 
 		if (null == deal.getUserid() || deal.getUserid() <= 0 ||
-			null == deal.getCoachid() || deal.getCoachid() <= 0 ||
-			null == deal.getPrice() || deal.getPrice() < 0){
+			null == deal.getCoachid() || deal.getCoachid() <= 0){
 			logger.info("invalid deal params");
 			return new ResponseEntity<Object>("invalid deal params",
 					HttpStatus.NOT_FOUND);
