@@ -1,8 +1,7 @@
 package example.controller;
 
 import alipay.util.AlipayNotify;
-import example.domain.PayOrder;
-import example.repository.DealRepository;
+import example.domain.Pay;
 import example.repository.PayRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -34,27 +34,25 @@ public class PayController {
 	private static final Logger logger = LoggerFactory.getLogger(PayController.class);
 
 	@Autowired
-	private DealRepository dealRepository;
-	@Autowired
 	private PayRepository payRepository;
 
-	@RequestMapping(value = "/car/pay/getpaystring", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = "/car/pay/getpaystring", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Object> getPayInfo(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
 		logger.info("Start getPayInfo.");
-		PayOrder payOrder = new PayOrder();
+		Pay pay = new Pay();
 
-		payOrder.setBody(ServletRequestUtils.getStringParameter(request, "body", ""));
-		payOrder.setPrice(ServletRequestUtils.getIntParameter(request, "price"));
-		payOrder.setSubject(ServletRequestUtils.getStringParameter(request, "subject", ""));
+		pay.setBody(ServletRequestUtils.getStringParameter(request, "body", ""));
+		pay.setPrice(ServletRequestUtils.getIntParameter(request, "price"));
+		pay.setSubject(ServletRequestUtils.getStringParameter(request, "subject", ""));
 
-		String orderInfo = payOrder.getOrderInfo();
+		String orderInfo = pay.getOrderInfo();
 		logger.info("orderInfo: " + orderInfo);
 
 		/**
 		 * 特别注意，这里的签名逻辑需要放在服务端，切勿将私钥泄露在代码中！
 		 */
-		String sign = PayOrder.sign(orderInfo);
+		String sign = Pay.sign(orderInfo);
 		try {
 			/**
 			 * 仅需对sign 做URL编码
@@ -67,7 +65,7 @@ public class PayController {
 		/**
 		 * 完整的符合支付宝参数规范的订单信息
 		 */
-		final String payInfo = orderInfo + "&sign=\"" + sign + "\"&" + PayOrder.getSignType();
+		final String payInfo = orderInfo + "&sign=\"" + sign + "\"&" + Pay.getSignType();
 		return new ResponseEntity<>(payInfo, HttpStatus.OK);
 	}
 
@@ -106,16 +104,16 @@ public class PayController {
 				}
 
 				try {
-					PayOrder payOrder = new PayOrder();
-					payOrder.setOut_trade_no(tradeNo); //此处需要转换
-					payOrder.setStatusCode("10"); //状态码，表示已支付
-					payOrder.setTotal_fee(Integer.parseInt(total_fee));
-					payOrder.setOrderNo(orderNo);
-					payOrder.setBuyer_email(buyer_email);
-					payOrder.setQuantity(Integer.parseInt(quantity));
-					payOrder.setSubject(subject);
-					payOrder.setBody(body);
-					payRepository.save(payOrder);
+					Pay pay = new Pay();
+					pay.setTradeno(tradeNo); //此处需要转换
+					pay.setStatusCode("10"); //状态码，表示已支付
+					pay.setTotal_fee(Integer.parseInt(total_fee));
+					pay.setOrderNo(orderNo);
+					pay.setBuyeremail(buyer_email);
+					pay.setQuantity(Integer.parseInt(quantity));
+					pay.setSubject(subject);
+					pay.setBody(body);
+					payRepository.save(pay);
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println("update payorder failed." + e.toString());
@@ -134,24 +132,23 @@ public class PayController {
 	}
 
 	//get user by userid
-	@RequestMapping(value = UserRestURIConstants.GET_USER, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = "/car/pay/getpayinfo", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> getUser(@ModelAttribute User user) {
-		if (null == user.getUserid() || user.getUserid() <= 0){ //null == user.getUserid() must be ahead of <=0, or will be NullPointerException
-			logger.info("userid is empty");
-			return new ResponseEntity<Object>("userid invalid",
+	public ResponseEntity<Object> getUser(@RequestBody Pay pay) {
+		if (null == pay.getTradeno() || "" == pay.getTradeno()){
+			logger.info("out_trade_no is empty");
+			return new ResponseEntity<Object>("out_trade_no is empty",
 					HttpStatus.NOT_FOUND);
 		}
-		logger.info("Start getUser. userid= " + user.getUserid());
+		logger.info("Start getUser. out_trade_no= " + pay.getTradeno());
 
-		User getUser = userRepository.findByUserid(user.getUserid());
-		if (null == getUser){
-			logger.info("user not found!");
-			return new ResponseEntity<Object>("userid invalid",
+		List<Pay> getPayList = payRepository.findBytradeno(pay.getTradeno());
+		if (getPayList.isEmpty()){
+			logger.info("payorder not found!");
+			return new ResponseEntity<Object>("payorder not found!",
 					HttpStatus.NOT_FOUND);
 		}
 
-		logger.info("get user Successfully!");
-		return new ResponseEntity<Object>(getUser, HttpStatus.OK);
+		return new ResponseEntity<Object>(getPayList, HttpStatus.OK);
 	}
 }

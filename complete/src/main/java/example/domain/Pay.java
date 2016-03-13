@@ -15,13 +15,14 @@ import java.util.Random;
  */
 @Entity
 @Table(name = "payorder")
-public class PayOrder {
+public class Pay {
 
 	@Id
 	@GeneratedValue
 	private Integer payorderid;
 
-	@Column(nullable = false) private String out_trade_no; //支付订单唯一编号
+	//强烈建议不要有属性名不能有下划线
+	@Column(nullable = false) private String tradeno; //支付订单唯一编号
     @Column(nullable = true) private Integer total_fee;   //总付款金额,移动端提供
 	@Column(nullable = true) private Integer price;       //商品单价，本系统可以不用，使用上面的总付款金额
 	@Column(nullable = true) private String statusCode;   //操作状态代码，0-未支付，10-已支付，4000-退款中，5000-已退款，6000-付款失败，6001-取消付款，7000-已消费
@@ -29,7 +30,7 @@ public class PayOrder {
 	@Column(nullable = true) private String isRefund;     //是否申请退款，可空,暂时不用
 	@Column(nullable = true) private String createTime;   //创建时间，可空
 	@Column(nullable = true) private String modifyTime;   //修改时间，可空
-	@Column(nullable = true) private String buyer_email;  //买家支付宝账号，可空
+	@Column(nullable = true) private String buyeremail;  //买家支付宝账号，可空
 	@Column(nullable = true) private int quantity;        //购买数量，可空
 	//@Column(nullable = true) private Integer dealid;    //对应的deal id, 必须有, 移动端提供
 	@Column(nullable = true) private String subject; //商品名称， 可空,移动端提供
@@ -131,12 +132,12 @@ public class PayOrder {
 		this.payorderid = payorderid;
 	}
 
-	public String getOut_trade_no() {
-		return out_trade_no;
+	public String getTradeno() {
+		return tradeno;
 	}
 
-	public void setOut_trade_no(String out_trade_no) {
-		this.out_trade_no = out_trade_no;
+	public void setTradeno(String tradeno) {
+		this.tradeno = tradeno;
 	}
 
 	public Integer getTotal_fee() {
@@ -195,12 +196,12 @@ public class PayOrder {
 		this.modifyTime = modifyTime;
 	}
 
-	public String getBuyer_email() {
-		return buyer_email;
+	public String getBuyeremail() {
+		return buyeremail;
 	}
 
-	public void setBuyer_email(String buyer_email) {
-		this.buyer_email = buyer_email;
+	public void setBuyeremail(String buyeremail) {
+		this.buyeremail = buyeremail;
 	}
 
 	public int getQuantity() {

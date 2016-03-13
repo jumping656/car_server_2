@@ -1,21 +1,16 @@
 package example.repository;
 
-import example.domain.Deal;
-import example.domain.PayOrder;
+import example.domain.Pay;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
 
-public interface PayRepository extends CrudRepository<PayOrder, Long> {
+public interface PayRepository extends CrudRepository<Pay, Long> {
 
-	List<PayOrder> findAll();
+	List<Pay> findAll();
 
-	List<PayOrder> findByUserid(Integer userid);
+	List<Pay> findBytradeno(String out_trade_no);
 
-	List<PayOrder> findByCoachid(Integer coachid);
-
-	PayOrder findByDealid(Integer dealid);
-
-	List<PayOrder> findByUseridAndState(Integer userid, Deal.DEAL_STATE deal_state);
+	List<Pay> findByPayorderid(Integer payorderid);
 }
