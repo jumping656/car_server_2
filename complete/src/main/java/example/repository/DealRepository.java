@@ -17,4 +17,6 @@ public interface DealRepository extends CrudRepository<Deal, Long> {
 	Deal findByDealid(Integer dealid);
 
 	List<Deal> findByUseridAndState(Integer userid, Deal.DEAL_STATE deal_state);
+
+	List<Deal> findBytradeno(String out_trade_no);
 }

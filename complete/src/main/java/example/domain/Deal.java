@@ -19,7 +19,7 @@ public class Deal {
 	@Column(nullable = true) private DEAL_STATE state; //订单状态，0已取消，1订单正在进行还未接单，2订单完成，3已学完
 	//@Column(nullable = true) private Integer price;
 	@Column(nullable = true) private String date;
-	@Column(nullable = true) private String out_trade_no; //商品订单编号，唯一，是Payorder表的主键,移动端在获取到加签后的订单信息后需要将订单编号填到这里
+	@Column(nullable = true) private String tradeno; //商品订单编号，唯一，是Payorder表的主键,移动端在获取到加签后的订单信息后需要将订单编号填到这里
 	@Column(nullable = true) private String dummy1;
 	@Column(nullable = true) private String dummy2;
 
@@ -87,11 +87,11 @@ public class Deal {
 		this.dummy2 = dummy2;
 	}
 
-	public String getOut_trade_no() {
-		return out_trade_no;
+	public String getTradeno() {
+		return tradeno;
 	}
 
-	public void setOut_trade_no(String out_trade_no) {
-		this.out_trade_no = out_trade_no;
+	public void setTradeno(String tradeno) {
+		this.tradeno = tradeno;
 	}
 }

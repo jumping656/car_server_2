@@ -1,8 +1,13 @@
 package example.controller;
 
+import Push.MessagePush;
 import alipay.util.AlipayNotify;
+import example.domain.Deal;
 import example.domain.Pay;
+import example.domain.User;
+import example.repository.DealRepository;
 import example.repository.PayRepository;
+import example.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -35,6 +37,10 @@ public class PayController {
 
 	@Autowired
 	private PayRepository payRepository;
+	@Autowired
+	private DealRepository dealRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@RequestMapping(value = "/car/pay/getpaystring", method = RequestMethod.POST)
 	@ResponseBody
@@ -114,6 +120,22 @@ public class PayController {
 					pay.setSubject(subject);
 					pay.setBody(body);
 					payRepository.save(pay);
+
+					//根据out_trade_no获取当前用户名
+					List<Deal> dealList = dealRepository.findBytradeno(tradeNo);
+					User user = userRepository.findByUserid(dealList.get(0).getUserid());
+					//初始化消息发送类
+					String message = "[风火轮支付消息]您已支付成功" + total_fee + "元。";
+					String title = "风火轮驾考平台通知";
+					MessagePush messagePush = new MessagePush(message, title);
+					Set<String> alias = new HashSet<>();
+					alias.add(user.getUsername());
+					long status = messagePush.sendPushAlias(alias);
+					if (0 == status){
+						//发送消息通知失败，考虑使用短信发送；
+						return "success";
+					}
+
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println("update payorder failed." + e.toString());
@@ -131,7 +153,7 @@ public class PayController {
 		}
 	}
 
-	//get user by userid
+	//get pay info by out_trade_no
 	@RequestMapping(value = "/car/pay/getpayinfo", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Object> getUser(@RequestBody Pay pay) {

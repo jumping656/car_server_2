@@ -21,7 +21,7 @@ public class Pay {
 	@GeneratedValue
 	private Integer payorderid;
 
-	//强烈建议不要有属性名不能有下划线
+	//强烈建议属性名不能有下划线
 	@Column(nullable = false) private String tradeno; //支付订单唯一编号
     @Column(nullable = true) private Integer total_fee;   //总付款金额,移动端提供
 	@Column(nullable = true) private Integer price;       //商品单价，本系统可以不用，使用上面的总付款金额
