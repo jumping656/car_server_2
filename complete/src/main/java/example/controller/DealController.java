@@ -23,9 +23,9 @@ public class DealController {
 	@Autowired
 	private DealRepository dealRepository;
 
-	@RequestMapping(value = DealRestURIConstants.CREATE_DEAL, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = DealRestURIConstants.CREATE_DEAL, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> createDeal(@ModelAttribute Deal deal) {
+	public ResponseEntity<Object> createDeal(@RequestBody Deal deal) {
 		logger.info("Start createDeal.");
 
 		if (null == deal.getUserid() || deal.getUserid() <= 0 ||
@@ -66,9 +66,9 @@ public class DealController {
 	}
 
 	//update deal
-	@RequestMapping(value = DealRestURIConstants.UPDATE_DEAL, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = DealRestURIConstants.UPDATE_DEAL, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> updateDeal(@ModelAttribute Deal deal) {
+	public ResponseEntity<Object> updateDeal(@RequestBody Deal deal) {
 		logger.info("Start updateDeal.");
 
 		if (deal.getDealid() <= 0 || null == deal.getDealid()){
@@ -110,9 +110,9 @@ public class DealController {
 	}
 
 	//delete deal
-	@RequestMapping(value = DealRestURIConstants.DELETE_DEAL, method = RequestMethod.DELETE, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = DealRestURIConstants.DELETE_DEAL, method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseEntity<Object> deleteDeal(@ModelAttribute Deal deal) {
+	public ResponseEntity<Object> deleteDeal(@RequestBody Deal deal) {
 		logger.info("Start deleteDeal.");
 
 		if (null == deal.getDealid() || deal.getDealid() <= 0){
@@ -148,9 +148,9 @@ public class DealController {
 	}
 
 	//get deal by dealid
-	@RequestMapping(value = DealRestURIConstants.GET_DEAL, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = DealRestURIConstants.GET_DEAL, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> getDeal(@ModelAttribute Deal deal) {
+	public ResponseEntity<Object> getDeal(@RequestBody Deal deal) {
 		logger.info("haha, get deal : ");
 		if (null == deal.getDealid() || deal.getDealid() <= 0){
 			logger.info("dealid is empty");
@@ -171,7 +171,7 @@ public class DealController {
 	}
 
 	//get deal by coachid
-	@RequestMapping(value = DealRestURIConstants.GET_DEAL_BY_COACH, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = DealRestURIConstants.GET_DEAL_BY_COACH, method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Object> getDealByCoachid(@PathVariable("coachid")Integer coachid) {
 		if (null == coachid || coachid <= 0){
@@ -193,7 +193,7 @@ public class DealController {
 	}
 
 	//get deal by userid
-	@RequestMapping(value = DealRestURIConstants.GET_DEAL_BY_USER, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = DealRestURIConstants.GET_DEAL_BY_USER, method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Object> getDealByUserid(@PathVariable("userid")Integer userid) {
 		if (null == userid || userid <= 0){

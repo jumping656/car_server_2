@@ -23,9 +23,9 @@ public class CoachController {
 	private CoachRepository coachRepository;
 
 	//first time register only with registerphone
-	@RequestMapping(value = CoachRestURIConstants.CREATE_COACH, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = CoachRestURIConstants.CREATE_COACH, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> createCoach(@ModelAttribute Coach coach) {
+	public ResponseEntity<Object> createCoach(@RequestBody Coach coach) {
 		logger.info("Start createCoach.");
 
 		if (null == coach.getRegisterphone() || coach.getRegisterphone().isEmpty()){
@@ -63,9 +63,9 @@ public class CoachController {
 	}
 
 	//update coach
-	@RequestMapping(value = CoachRestURIConstants.UPDATE_COACH, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = CoachRestURIConstants.UPDATE_COACH, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> updateCoach(@ModelAttribute Coach coach) {
+	public ResponseEntity<Object> updateCoach(@RequestBody Coach coach) {
 		logger.info("Start updateCoach.");
 
 		if (coach.getCoachid() <= 0  || null == coach.getCoachid()){
@@ -111,9 +111,9 @@ public class CoachController {
 	}
 
 	//delete coach
-	@RequestMapping(value = CoachRestURIConstants.DELETE_COACH, method = RequestMethod.DELETE, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = CoachRestURIConstants.DELETE_COACH, method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseEntity<Object> deleteUser(@ModelAttribute Coach coach) {
+	public ResponseEntity<Object> deleteUser(@RequestBody Coach coach) {
 		logger.info("Start deleteCoach.");
 
 		if (null == coach.getCoachid() || coach.getCoachid() <= 0){
@@ -149,9 +149,9 @@ public class CoachController {
 	}
 
 	//get coach by coachid
-	@RequestMapping(value = CoachRestURIConstants.GET_COACH, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = CoachRestURIConstants.GET_COACH, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> getCoach(@ModelAttribute Coach coach) {
+	public ResponseEntity<Object> getCoach(@RequestBody Coach coach) {
 		if (null == coach.getCoachid() || coach.getCoachid() <= 0){
 			logger.info("coachid is empty");
 			return new ResponseEntity<Object>("coachid invalid",

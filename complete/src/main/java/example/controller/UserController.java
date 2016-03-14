@@ -28,9 +28,9 @@ public class UserController {
 	private UserRepository userRepository;
 
 	//first time register only with registerphone
-	@RequestMapping(value = UserRestURIConstants.CREATE_USER, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = UserRestURIConstants.CREATE_USER, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> createUser(@ModelAttribute User user) {
+	public ResponseEntity<Object> createUser(@RequestBody User user) {
 		logger.info("Start createUser.");
 
 		if (null == user.getRegisterphone() || user.getRegisterphone().isEmpty()){
@@ -68,9 +68,9 @@ public class UserController {
 	}
 
 	//update user
-	@RequestMapping(value = UserRestURIConstants.UPDATE_USER, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = UserRestURIConstants.UPDATE_USER, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> updateUser(@ModelAttribute User user) {
+	public ResponseEntity<Object> updateUser(@RequestBody User user) {
 		logger.info("Start updateUser.");
 
 		if (null == user.getUserid() || user.getUserid() <= 0){
@@ -129,9 +129,9 @@ public class UserController {
 	}
 
 	//delete user
-	@RequestMapping(value = UserRestURIConstants.DELETE_USER, method = RequestMethod.DELETE, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = UserRestURIConstants.DELETE_USER, method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseEntity<Object> deleteUser(@ModelAttribute User user) {
+	public ResponseEntity<Object> deleteUser(@RequestBody User user) {
 		logger.info("Start deleteUser.");
 
 		if (null == user.getUserid() || user.getUserid() <= 0){
@@ -165,9 +165,9 @@ public class UserController {
 	}
 
 	//get user by userid
-	@RequestMapping(value = UserRestURIConstants.GET_USER, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = UserRestURIConstants.GET_USER, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> getUser(@ModelAttribute User user) {
+	public ResponseEntity<Object> getUser(@RequestBody User user) {
 		if (null == user.getUserid() || user.getUserid() <= 0){ //null == user.getUserid() must be ahead of <=0, or will be NullPointerException
 			logger.info("userid is empty");
 			return new ResponseEntity<Object>("userid invalid",
@@ -204,9 +204,9 @@ public class UserController {
 	}
 
 	//user login by registerphone or username
-	@RequestMapping(value = UserRestURIConstants.USER_LOGIN, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@RequestMapping(value = UserRestURIConstants.USER_LOGIN, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Object> userLogin(@ModelAttribute User user) {
+	public ResponseEntity<Object> userLogin(@RequestBody User user) {
 		String loginKey = null;
 		User getUser = null;
 		//check params
