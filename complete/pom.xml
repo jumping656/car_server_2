@@ -18,6 +18,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
@@ -72,6 +73,21 @@
             <artifactId>mockwebserver</artifactId>
             <version>1.5.4</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.karaf.webconsole</groupId>
+            <artifactId>org.apache.karaf.webconsole.console</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.4.1.1</version>
         </dependency>
 
     </dependencies>

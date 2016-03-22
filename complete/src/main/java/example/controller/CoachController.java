@@ -27,17 +27,22 @@ public class CoachController {
 	@ResponseBody
 	public ResponseEntity<Object> createCoach(@RequestBody Coach coach) {
 		logger.info("Start createCoach.");
+		ResponseResult responseResult = new ResponseResult();
 
 		if (null == coach.getRegisterphone() || coach.getRegisterphone().isEmpty()){
 			logger.info("register phone is empty");
-			return new ResponseEntity<Object>("register phone is empty",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		Coach getCoach = coachRepository.findByRegisterphone(coach.getRegisterphone());
 		if (null != getCoach){
 			logger.info("register phone already exists");
-			return new ResponseEntity<Object>("register phone already exists",
+			responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.CONFLICT);
 		}
 
@@ -49,7 +54,9 @@ public class CoachController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("create coach failed!");
-			return new ResponseEntity<Object>("fail to create coach.", HttpStatus.NOT_FOUND);
+			responseResult.setCode(ResponseResult.OPERATION_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult, HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
 //				conn.close();
@@ -59,7 +66,9 @@ public class CoachController {
 		}
 
 		logger.info("create coach Successfully!");
-		return new ResponseEntity<Object>(coach, HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(coach);
+		return new ResponseEntity<Object>(responseResult, HttpStatus.OK);
 	}
 
 	//update coach
@@ -67,17 +76,22 @@ public class CoachController {
 	@ResponseBody
 	public ResponseEntity<Object> updateCoach(@RequestBody Coach coach) {
 		logger.info("Start updateCoach.");
+		ResponseResult responseResult = new ResponseResult();
 
 		if (coach.getCoachid() <= 0  || null == coach.getCoachid()){
 			logger.info("coachid is empty");
-			return new ResponseEntity<Object>("coachid is empty",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		Coach getCoach = coachRepository.findByCoachid(coach.getCoachid());
 		if (null == getCoach){
 			logger.info("coach not exists");
-			return new ResponseEntity<Object>("coach not exists",
+			responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -107,7 +121,9 @@ public class CoachController {
 		}
 
 		logger.info("update coach Successfully!");
-		return new ResponseEntity<Object>(getCoach, HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(getCoach);
+		return new ResponseEntity<Object>(responseResult, HttpStatus.OK);
 	}
 
 	//delete coach
@@ -115,17 +131,22 @@ public class CoachController {
 	@ResponseBody
 	public ResponseEntity<Object> deleteUser(@RequestBody Coach coach) {
 		logger.info("Start deleteCoach.");
+		ResponseResult responseResult = new ResponseResult();
 
 		if (null == coach.getCoachid() || coach.getCoachid() <= 0){
 			logger.info("coachid invalid");
-			return new ResponseEntity<Object>("coachid invalid",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		Coach getCoach = coachRepository.findByCoachid(coach.getCoachid());
 		if (null == getCoach){
 			logger.info("coach not exists");
-			return new ResponseEntity<Object>("coach not exists",
+			responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -134,7 +155,9 @@ public class CoachController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("delete deal failed");
-			return new ResponseEntity<Object>("delete deal failed",
+			responseResult.setCode(ResponseResult.OPERATION_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
@@ -145,16 +168,22 @@ public class CoachController {
 		}
 
 		logger.info("delete coach Successfully!");
-		return new ResponseEntity<Object>("coach deleted", HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(coach);
+		return new ResponseEntity<Object>(responseResult, HttpStatus.OK);
 	}
 
 	//get coach by coachid
 	@RequestMapping(value = CoachRestURIConstants.GET_COACH, method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Object> getCoach(@RequestBody Coach coach) {
+		ResponseResult responseResult = new ResponseResult();
+
 		if (null == coach.getCoachid() || coach.getCoachid() <= 0){
 			logger.info("coachid is empty");
-			return new ResponseEntity<Object>("coachid invalid",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 		logger.info("Start getCoach. coachid= " + coach.getCoachid());
@@ -162,12 +191,16 @@ public class CoachController {
 		Coach getCoach = coachRepository.findByCoachid(coach.getCoachid());
 		if (null == getCoach){
 			logger.info("coach not found!");
-			return new ResponseEntity<Object>("coachid not found",
+			responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+			responseResult.setResult(coach);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		logger.info("get coach Successfully!");
-		return new ResponseEntity<Object>(getCoach, HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(getCoach);
+		return new ResponseEntity<Object>(responseResult, HttpStatus.OK);
 	}
 
 	//get all coachs
@@ -175,15 +208,19 @@ public class CoachController {
 	@ResponseBody
 	public ResponseEntity<Object> getAllCoachs() {
 		logger.info("Start getCoachs.");
+		ResponseResult responseResult = new ResponseResult();
 
 		List<Coach> getCoachList = coachRepository.findAll();
 		if (getCoachList.isEmpty()){
 			logger.info("no coach");
-			return new ResponseEntity<Object>("no coach found",
+			responseResult.setCode(ResponseResult.SUCCESS);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		logger.info("get all coachs Successfully!");
-		return new ResponseEntity<Object>(getCoachList, HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(getCoachList);
+		return new ResponseEntity<Object>(responseResult, HttpStatus.OK);
 	}
 }

@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Created by ejiping on 2016/2/21.
+ * 该类是模拟考试模块处理题目收藏的controller类
+ */
 @Controller
 @RestController
 public class CollectionController {

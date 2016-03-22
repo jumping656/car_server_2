@@ -45,15 +45,20 @@ public class UploadController {
 													   @RequestParam(value="file")MultipartFile file){
 		logger.info("Start uploadFileDispath.");
 		logger.info("type: " + type);
+		ResponseResult responseResult = new ResponseResult();
 
 		if (null == file || file.isEmpty()){
 			logger.info("MultipartFile empty");
-			return new ResponseEntity<Object>("MultipartFile empty",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult("MultipartFile empty");
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 		if (null == registerPhone || registerPhone.isEmpty()){
 			logger.info("registerPhone empty");
-			return new ResponseEntity<Object>("registerPhone empty",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(registerPhone);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -62,44 +67,60 @@ public class UploadController {
 			User getUser = userAvatarHandler(registerPhone, file);
 			if (null != getUser){
 				logger.info("upload file successfully, return object!");
-				return new ResponseEntity<Object>(getUser,
+				responseResult.setCode(ResponseResult.SUCCESS);
+				responseResult.setResult(getUser);
+				return new ResponseEntity<>(responseResult,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("upload user avatar fail, please check log!",
+			responseResult.setCode(ResponseResult.OPERATION_ERROR);
+			responseResult.setResult("upload user avatar fail, please check log");
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 		else if (type.equals(UploadRestParamConstants.FILE_TYPE_COACHAVATAR)){
 			Coach getCoach = coachAvatarHandler(registerPhone, file);
 			if (null != getCoach){
 				logger.info("upload file successfully, return object!");
-				return new ResponseEntity<Object>(getCoach,
+				responseResult.setCode(ResponseResult.SUCCESS);
+				responseResult.setResult(getCoach);
+				return new ResponseEntity<>(responseResult,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("upload coach avatar fail, please check log!",
+			responseResult.setCode(ResponseResult.SUCCESS);
+			responseResult.setResult("upload coach avatar fail, please check log!");
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 		else if (type.equals(UploadRestParamConstants.FILE_TYPE_COACHIDCARD)){
 			Coach getCoach = coachIdCardAvatarHandler(registerPhone, file);
 			if (null != getCoach){
 				logger.info("upload file successfully, return object!");
-				return new ResponseEntity<Object>(getCoach,
+				responseResult.setCode(ResponseResult.SUCCESS);
+				responseResult.setResult(getCoach);
+				return new ResponseEntity<>(responseResult,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("upload coach id card fail, please check log!",
+			responseResult.setCode(ResponseResult.SUCCESS);
+			responseResult.setResult("upload coach id card fail, please check log!");
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 		else if (type.equals(UploadRestParamConstants.FILE_TYPE_COACHCARD)){
 			Coach getCoach = coachCardAvatarHandler(registerPhone, file);
 			if (null != getCoach){
 				logger.info("upload file successfully, return object!");
-				return new ResponseEntity<Object>(getCoach,
+				responseResult.setCode(ResponseResult.SUCCESS);
+				responseResult.setResult(getCoach);
+				return new ResponseEntity<>(responseResult,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("upload coach card fail, please check log!",
+			responseResult.setCode(ResponseResult.SUCCESS);
+			responseResult.setResult("upload coach card fail, please check log!");
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 		else {
-			return new ResponseEntity<Object>("file type invalid",
+			return new ResponseEntity<>("file type invalid",
 					HttpStatus.NOT_FOUND);
 		}
 	}

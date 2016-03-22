@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Created by ejiping on 2016/2/21.
+ * 该类处理模拟考试模块错题记录的controller类
+ */
 @Controller
 @RestController
 public class ErrorController {
@@ -30,7 +34,7 @@ public class ErrorController {
 		if (null == errorQuestion.getSubjectoneid() || errorQuestion.getSubjectoneid() <= 0 ||
 				null == errorQuestion.getUserid() || errorQuestion.getUserid() <= 0) {
 			logger.info("invalid error question record params");
-			return new ResponseEntity<Object>("invalid error question record params",
+			return new ResponseEntity<>("invalid error question record params",
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -39,7 +43,7 @@ public class ErrorController {
 			ErrorQuestion errorIterator = errorQuestionList.get(i);
 			if (errorIterator.getSubjectoneid() == errorQuestion.getSubjectoneid()) {
 				logger.info("error question record exists.");
-				return new ResponseEntity<Object>("error question record exists.",
+				return new ResponseEntity<>("error question record exists.",
 						HttpStatus.CONFLICT);
 			}
 		}
@@ -50,7 +54,7 @@ public class ErrorController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("create error question record failed.");
-			return new ResponseEntity<Object>("create error question record failed.", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("create error question record failed.", HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
 //				conn.close();
@@ -60,7 +64,7 @@ public class ErrorController {
 		}
 
 		logger.info("create error question record Successfully!");
-		return new ResponseEntity<Object>(errorQuestion, HttpStatus.OK);
+		return new ResponseEntity<>(errorQuestion, HttpStatus.OK);
 	}
 
 	//create subject_four error question
@@ -72,7 +76,7 @@ public class ErrorController {
 		if (null == errorQuestion.getSubjectfourid() || errorQuestion.getSubjectfourid() <= 0 ||
 				null == errorQuestion.getUserid() || errorQuestion.getUserid() <= 0) {
 			logger.info("invalid error question record params");
-			return new ResponseEntity<Object>("invalid error question record params",
+			return new ResponseEntity<>("invalid error question record params",
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -81,7 +85,7 @@ public class ErrorController {
 			ErrorQuestion errorIterator = errorQuestionList.get(i);
 			if (errorIterator.getSubjectfourid() == errorQuestion.getSubjectfourid()) {
 				logger.info("error question record exists.");
-				return new ResponseEntity<Object>("error question record exists.",
+				return new ResponseEntity<>("error question record exists.",
 						HttpStatus.CONFLICT);
 			}
 		}
@@ -92,7 +96,7 @@ public class ErrorController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("create error question record failed.");
-			return new ResponseEntity<Object>("create error question record failed.", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("create error question record failed.", HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
 //				conn.close();
@@ -115,7 +119,7 @@ public class ErrorController {
 
 		if (null == errorQuestion) {
 			logger.info("errorQuestion empty");
-			return new ResponseEntity<Object>("errorQuestion empty",
+			return new ResponseEntity<>("errorQuestion empty",
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -123,62 +127,62 @@ public class ErrorController {
 			List<ErrorQuestion> getErrorQuestionList = getRecordByOneIdHandler(errorQuestion);
 			if (null != getErrorQuestionList && !getErrorQuestionList.isEmpty()) {
 				logger.info("get records successfully, return object!");
-				return new ResponseEntity<Object>(getErrorQuestionList,
+				return new ResponseEntity<>(getErrorQuestionList,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("get records fail, please check log!",
+			return new ResponseEntity<>("get records fail, please check log!",
 					HttpStatus.NOT_FOUND);
 		} else if (type.equals(ErrorRestURIConstants.GETTYPE_ERRORS_BY_FOUREID)) {
 			List<ErrorQuestion> getErrorQuestionList = getRecordByFourIdHandler(errorQuestion);
 			if (null != getErrorQuestionList && !getErrorQuestionList.isEmpty()) {
 				logger.info("get records successfully, return object!");
-				return new ResponseEntity<Object>(getErrorQuestionList,
+				return new ResponseEntity<>(getErrorQuestionList,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("get records fail, please check log!!",
+			return new ResponseEntity<>("get records fail, please check log!!",
 					HttpStatus.NOT_FOUND);
 		} else if (type.equals(ErrorRestURIConstants.GETTYPE_ERRORS_BY_USERID)) {
 			List<ErrorQuestion> getErrorQuestionList = getRecordByUserIdHandler(errorQuestion);
 			if (null != getErrorQuestionList && !getErrorQuestionList.isEmpty()) {
 				logger.info("get records successfully, return object!");
-				return new ResponseEntity<Object>(getErrorQuestionList,
+				return new ResponseEntity<>(getErrorQuestionList,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("get records fail, please check log!!",
+			return new ResponseEntity<>("get records fail, please check log!!",
 					HttpStatus.NOT_FOUND);
 		}
 		else if (type.equals(ErrorRestURIConstants.GETTYPE_ERRORS_BY_ERRORID)) {
 			List<ErrorQuestion> getErrorQuestionList = getRecordByErrorIdHandler(errorQuestion);
 			if (null != getErrorQuestionList && !getErrorQuestionList.isEmpty()) {
 				logger.info("get records successfully, return object!");
-				return new ResponseEntity<Object>(getErrorQuestionList,
+				return new ResponseEntity<>(getErrorQuestionList,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("get records fail, please check log!!",
+			return new ResponseEntity<>("get records fail, please check log!!",
 					HttpStatus.NOT_FOUND);
 		}
 		else if (type.equals(ErrorRestURIConstants.GETTYPE_ERRORS_BY_USERID_AND_ONEID)) {
 			List<ErrorQuestion> getErrorQuestionList = getRecordByUserIdAndOneIdHandler(errorQuestion);
 			if (null != getErrorQuestionList && !getErrorQuestionList.isEmpty()) {
 				logger.info("get records successfully, return object!");
-				return new ResponseEntity<Object>(getErrorQuestionList,
+				return new ResponseEntity<>(getErrorQuestionList,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("get records fail, please check log!!",
+			return new ResponseEntity<>("get records fail, please check log!!",
 					HttpStatus.NOT_FOUND);
 		}
 		else if (type.equals(ErrorRestURIConstants.GETTYPE_ERRORS_BY_USERID_AND_FOURID)) {
 			List<ErrorQuestion> getErrorQuestionList = getRecordByUserIdAndFourIdHandler(errorQuestion);
 			if (null != getErrorQuestionList && !getErrorQuestionList.isEmpty()) {
 				logger.info("get records successfully, return object!");
-				return new ResponseEntity<Object>(getErrorQuestionList,
+				return new ResponseEntity<>(getErrorQuestionList,
 						HttpStatus.OK);
 			}
-			return new ResponseEntity<Object>("get records fail, please check log!!",
+			return new ResponseEntity<>("get records fail, please check log!!",
 					HttpStatus.NOT_FOUND);
 		}
 		else{
-			return new ResponseEntity<Object>("file type invalid",
+			return new ResponseEntity<>("file type invalid",
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -191,14 +195,14 @@ public class ErrorController {
 
 		if (null == errorQuestion.getErrorid() || errorQuestion.getErrorid() <= 0) {
 			logger.info("errorid invalid");
-			return new ResponseEntity<Object>("errorid invalid",
+			return new ResponseEntity<>("errorid invalid",
 					HttpStatus.NOT_FOUND);
 		}
 
 		List<ErrorQuestion> getErrorQuestionList = errorRepository.findByErrorid(errorQuestion.getErrorid());
 		if (getErrorQuestionList.isEmpty()) {
 			logger.info("error not exists");
-			return new ResponseEntity<Object>("error not exists",
+			return new ResponseEntity<>("error not exists",
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -208,7 +212,7 @@ public class ErrorController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("delete error record failed");
-			return new ResponseEntity<Object>("delete error record failed",
+			return new ResponseEntity<>("delete error record failed",
 					HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
@@ -219,7 +223,7 @@ public class ErrorController {
 		}
 
 		logger.info("delete record Successfully!");
-		return new ResponseEntity<Object>("record deleted", HttpStatus.OK);
+		return new ResponseEntity<>("record deleted", HttpStatus.OK);
 	}
 
 	//get error record by oneid

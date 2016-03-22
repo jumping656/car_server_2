@@ -171,6 +171,6 @@ public class PayController {
 					HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<Object>(getPayList, HttpStatus.OK);
+		return new ResponseEntity<>(getPayList, HttpStatus.OK);
 	}
 }

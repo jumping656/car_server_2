@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,26 +24,31 @@ import java.util.List;
 public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
+	                     Model model;
 	@Autowired
 	private UserRepository userRepository;
 
 	//first time register only with registerphone
-	@RequestMapping(value = UserRestURIConstants.CREATE_USER, method = RequestMethod.POST)
+	@RequestMapping(value = UserRestURIConstants.CREATE_USER, method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Object> createUser(@RequestBody User user) {
 		logger.info("Start createUser.");
+		ResponseResult responseResult = new ResponseResult();
 
 		if (null == user.getRegisterphone() || user.getRegisterphone().isEmpty()){
 			logger.info("register phone is empty");
-			return new ResponseEntity<Object>(user,
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		User getUser = userRepository.findByRegisterphone(user.getRegisterphone());
 		if (null != getUser){
 			logger.info("register phone already exists");
-			return new ResponseEntity<Object>("register phone already exists",
+			responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<Object>(responseResult,
 					HttpStatus.CONFLICT);
 		}
 
@@ -54,7 +60,9 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("create user failed!");
-			return new ResponseEntity<Object>("fail to create user.", HttpStatus.NOT_FOUND);
+			responseResult.setCode(ResponseResult.OPERATION_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult, HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
 //				conn.close();
@@ -64,7 +72,9 @@ public class UserController {
 		}
 
 		logger.info("create user Successfully!");
-		return new ResponseEntity<Object>(user, HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(user);
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
 	//update user
@@ -72,17 +82,22 @@ public class UserController {
 	@ResponseBody
 	public ResponseEntity<Object> updateUser(@RequestBody User user) {
 		logger.info("Start updateUser.");
+		ResponseResult responseResult = new ResponseResult();
 
 		if (null == user.getUserid() || user.getUserid() <= 0){
 			logger.info("userid empty");
-			return new ResponseEntity<Object>("userid is empty",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		User getUser = userRepository.findByUserid(user.getUserid());
 		if (null == getUser){
 			logger.info("user not exists");
-			return new ResponseEntity<Object>("user not exists",
+			responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -96,7 +111,9 @@ public class UserController {
 				User userTmp = userRepository.findByUsername(user.getUsername());
 				if (null != userTmp){
 					logger.info("username already exits");
-					return new ResponseEntity<Object>("username already exits", HttpStatus.CONFLICT);
+					responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+					responseResult.setResult(user);
+					return new ResponseEntity<>(responseResult, HttpStatus.CONFLICT);
 				}
 				getUser.setUsername(user.getUsername());
 //			}
@@ -115,7 +132,9 @@ public class UserController {
 			userRepository.save(getUser);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Object>("fail to update user.", HttpStatus.NOT_FOUND);
+			responseResult.setCode(ResponseResult.OPERATION_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult, HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
 //				conn.close();
@@ -125,7 +144,9 @@ public class UserController {
 		}
 
 		logger.info("update user Successfully!");
-		return new ResponseEntity<Object>(getUser, HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(getUser);
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
 	//delete user
@@ -133,17 +154,22 @@ public class UserController {
 	@ResponseBody
 	public ResponseEntity<Object> deleteUser(@RequestBody User user) {
 		logger.info("Start deleteUser.");
+		ResponseResult responseResult = new ResponseResult();
 
 		if (null == user.getUserid() || user.getUserid() <= 0){
 			logger.info("userid invalid");
-			return new ResponseEntity<Object>("userid invalid",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		User getUser = userRepository.findByUserid(user.getUserid());
 		if (null == getUser){
 			logger.info("user not exists");
-			return new ResponseEntity<Object>("user not exists",
+			responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -161,16 +187,22 @@ public class UserController {
 		}
 
 		logger.info("delete user Successfully!");
-		return new ResponseEntity<Object>("user deleted.", HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(user);
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
 	//get user by userid
 	@RequestMapping(value = UserRestURIConstants.GET_USER, method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Object> getUser(@RequestBody User user) {
+		ResponseResult responseResult = new ResponseResult();
+
 		if (null == user.getUserid() || user.getUserid() <= 0){ //null == user.getUserid() must be ahead of <=0, or will be NullPointerException
 			logger.info("userid is empty");
-			return new ResponseEntity<Object>("userid invalid",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 		logger.info("Start getUser. userid= " + user.getUserid());
@@ -178,12 +210,16 @@ public class UserController {
 		User getUser = userRepository.findByUserid(user.getUserid());
 		if (null == getUser){
 			logger.info("user not found!");
-			return new ResponseEntity<Object>("userid invalid",
+			responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		logger.info("get user Successfully!");
-		return new ResponseEntity<Object>(getUser, HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(getUser);
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
 	//get all users
@@ -191,16 +227,20 @@ public class UserController {
 	@ResponseBody
 	public ResponseEntity<Object> getAllUsers() {
 		logger.info("Start getUsers.");
+		ResponseResult responseResult = new ResponseResult();
 
 		List<User> getUserList = userRepository.findAll();
 		if (getUserList.isEmpty()){
 			logger.info("no user");
-			return new ResponseEntity<Object>("no user found",
+			responseResult.setCode(ResponseResult.CONSISTENCY_ERROR);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		logger.info("get all users Successfully!");
-		return new ResponseEntity<Object>(getUserList, HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(getUserList);
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
 	//user login by registerphone or username
@@ -209,10 +249,14 @@ public class UserController {
 	public ResponseEntity<Object> userLogin(@RequestBody User user) {
 		String loginKey = null;
 		User getUser = null;
+		ResponseResult responseResult = new ResponseResult();
+
 		//check params
 		if (null == user.getPassword() || "" == user.getPassword()){
 			logger.info("password empty");
-			return new ResponseEntity<Object>("password empty",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -228,13 +272,17 @@ public class UserController {
 		}
 		else{
 			logger.info("registerphone or username need to login");
-			return new ResponseEntity<Object>("registerphone or username need to login",
+			responseResult.setCode(ResponseResult.PARAM_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
 		if (null == getUser){
 			logger.info("user not exists");
-			return new ResponseEntity<Object>("user not exists",
+			responseResult.setCode(ResponseResult.DB_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult,
 					HttpStatus.NOT_FOUND);
 		}
 
@@ -242,11 +290,15 @@ public class UserController {
 			String md5String = Md5.getMD5Str(user.getPassword());
 			if (!getUser.getPassword().equals(md5String)){
 				logger.info("password or username/registerphone invalid!");
-				return new ResponseEntity<Object>("password or username/registerphone invalid!", HttpStatus.NOT_FOUND);
+				responseResult.setCode(ResponseResult.PARAM_ERROR);
+				responseResult.setResult(user);
+				return new ResponseEntity<>(responseResult, HttpStatus.NOT_FOUND);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Object>("login error", HttpStatus.NOT_FOUND);
+			responseResult.setCode(ResponseResult.OPERATION_ERROR);
+			responseResult.setResult(user);
+			return new ResponseEntity<>(responseResult, HttpStatus.NOT_FOUND);
 		} finally {
 //			try {
 //				conn.close();
@@ -256,6 +308,8 @@ public class UserController {
 		}
 
 		logger.info("login Successfully!");
-		return new ResponseEntity<Object>("login success", HttpStatus.OK);
+		responseResult.setCode(ResponseResult.SUCCESS);
+		responseResult.setResult(getUser);
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 }
