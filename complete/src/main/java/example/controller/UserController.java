@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * Handles requests for the User service.
+ * 该类处理普通学员的controller类
  */
 
 @Controller
