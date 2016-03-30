@@ -23,17 +23,17 @@ import java.io.File;
 @RestController
 public class UploadController {
 
-	//private static final String USERAVATAR_PATH  = "/usr/useravatar/";
-	//private static final String COACHAVATAR_PATH = "/usr/coachavatar/";
-	//private static final String COACHIDCARD_PATH = "/usr/coachidcard/";
-	//private static final String COACHCARD_PATH   = "/usr/coachcard/";
+	private static final String USERAVATAR_PATH  = "/usr/useravatar/";
+	private static final String COACHAVATAR_PATH = "/usr/coachavatar/";
+	private static final String COACHIDCARD_PATH = "/usr/coachidcard/";
+	private static final String COACHCARD_PATH   = "/usr/coachcard/";
 
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private CoachRepository coachRepository;
 
-	private static final String USERAVATAR_PATH = "C:\\Users\\EJIPING";
+	//private static final String USERAVATAR_PATH = "C:\\Users\\EJIPING";
 	private static final String SEPARATOR = "\\";
 	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
 
@@ -131,7 +131,7 @@ public class UploadController {
 
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		fileName = SEPARATOR + registerphone + suffixName;
-		logger.info("hahaha");
+		//logger.info("hahaha");
 
 		File dir = new File(USERAVATAR_PATH);
 		if (!dir.exists()) {
@@ -177,8 +177,8 @@ public class UploadController {
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		fileName = SEPARATOR + registerphone + suffixName;
 
-		//File dir = new File(COACHAVATAR_PATH);
-		File dir = new File(USERAVATAR_PATH);
+		File dir = new File(COACHAVATAR_PATH);
+		//File dir = new File(USERAVATAR_PATH);
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
@@ -222,8 +222,8 @@ public class UploadController {
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		fileName = SEPARATOR + registerphone + separator + suffixName;
 
-		//File dir = new File(COACHIDCARD_PATH);
-		File dir = new File(USERAVATAR_PATH);
+		File dir = new File(COACHIDCARD_PATH);
+		//File dir = new File(USERAVATAR_PATH);
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
@@ -267,8 +267,8 @@ public class UploadController {
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		fileName = SEPARATOR + registerphone + separator + suffixName;
 
-		//File dir = new File(COACHCARD_PATH);
-		File dir = new File(USERAVATAR_PATH);
+		File dir = new File(COACHCARD_PATH);
+		//File dir = new File(USERAVATAR_PATH);
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
