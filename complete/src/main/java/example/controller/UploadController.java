@@ -34,7 +34,7 @@ public class UploadController {
 	private CoachRepository coachRepository;
 
 	//private static final String USERAVATAR_PATH = "C:\\Users\\EJIPING";
-	private static final String SEPARATOR = "\\";
+	private static final String SEPARATOR = "//";
 	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
 
 	//dispatch different func to handler, return status
