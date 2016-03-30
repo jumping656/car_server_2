@@ -34,7 +34,7 @@ public class UploadController {
 	private CoachRepository coachRepository;
 
 	//private static final String USERAVATAR_PATH = "C:\\Users\\EJIPING";
-	private static final String SEPARATOR = "//";
+	private static final String SEPARATOR = "/";
 	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
 
 	//dispatch different func to handler, return status
@@ -217,7 +217,7 @@ public class UploadController {
 	//coachidcard handler
 	public Coach coachIdCardAvatarHandler(String registerphone, MultipartFile file){
 		String fileName;
-		String separator = "_coachid_";
+		String separator = "_coachid";
 
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		fileName = SEPARATOR + registerphone + separator + suffixName;
@@ -262,7 +262,7 @@ public class UploadController {
 	//coachcard handler
 	public Coach coachCardAvatarHandler(String registerphone, MultipartFile file){
 		String fileName;
-		String separator = "_coachcard_";
+		String separator = "_coachcard";
 
 		String suffixName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		fileName = SEPARATOR + registerphone + separator + suffixName;
