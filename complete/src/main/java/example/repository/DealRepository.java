@@ -2,10 +2,13 @@ package example.repository;
 
 import example.domain.Deal;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
+@Transactional
+@Repository
 public interface DealRepository extends CrudRepository<Deal, Long> {
 
 	List<Deal> findAll();
